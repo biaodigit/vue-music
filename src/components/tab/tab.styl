@@ -1,0 +1,19 @@
+@import "~common/stylus/common.styl"
+
+.tab
+  display flex
+  height 44px
+  line-height 44px
+  border-1px($border-1px)
+  font-size $font-size-medium
+  .tab-item
+    flex 1
+    text-align center
+    .tab-link
+      display inline-block
+      height 42px
+    &.router-link-active
+      .tab-link
+        color $color-theme
+        border-bottom 2px solid $color-theme
+
