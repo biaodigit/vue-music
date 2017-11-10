@@ -1,26 +1,44 @@
 <template>
   <div class="recommend">
-    <div class="recommend-content">
-      <div class="slider-wrapper">
-        <div v-if="recommends.length" class="slider-content">
-          <slider>
-            <div v-for="item in recommends">
-              <a :href="item.linkUrl">
-                <img :src="item.picUrl">
-              </a>
-            </div>
-          </slider>
+    <scroll class="recommend-content" :data="discList">
+      <div>
+        <div class="slider-wrapper">
+          <div v-if="recommends.length" class="slider-content">
+            <slider>
+              <div v-for="item in recommends">
+                <a :href="item.linkUrl">
+                  <img :src="item.picUrl">
+                </a>
+              </div>
+            </slider>
+          </div>
+        </div>
+        <div class="recommend-list">
+          <h1 class="list-title">热门歌单</h1>
+          <ul>
+            <li class="item" v-for="(item,index) in discList">
+              <div class="icon">
+                <img width="60" height="60" v-lazy="item.imgurl">
+              </div>
+              <div class="text">
+                <h2 class="name" v-html="item.creator.name.trim()"></h2>
+                <p class="desc" v-html="item.dissname.trim()"></p>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
-      <div class="recommend-list">
-        <h1 class="list-title">热门歌单</h1>
+      <div class="loading-container" v-show="!discList.length">
+        <loading title="载入中"></loading>
       </div>
-    </div>
+    </scroll>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Slider from 'base/slider/slider'
+  import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   import {getRecommend, getDiscList} from 'api/recommend'
   import {ERR_OK} from 'api/config'
 
@@ -31,7 +49,8 @@
     },
     data() {
       return {
-        recommends: []
+        recommends: [],
+        discList: []
       }
     },
     methods: {
@@ -46,13 +65,15 @@
       _getDiscList() {
         getDiscList().then((res) => {
           if (res.code === ERR_OK) {
-            console.log(res.data.list)
+            this.discList = res.data.list
           }
         })
       }
     },
     components: {
-      Slider
+      Slider,
+      Scroll,
+      Loading
     }
   }
 </script>

@@ -44,8 +44,26 @@
           this._play()
         }
       }, 20)
+
+      window.addEventListener('resize', () => {
+        if (!this.slider || !this.slider.enabled) {
+          return
+        }
+        clearTimeout(this.resizeTimer)
+        this.resizeTimer = setTimeout(() => {
+          if (this.slider.isInTransition) {
+            this._changePageIndex()
+          } else {
+            if (this.autoPlay) {
+              this._play()
+            }
+          }
+          this.refreshSlider()
+        }, 60)
+      })
     },
     activated() {
+      this.slider.enable()
       let pageIndex = this.slider.getCurrentPage().pageX
       if (pageIndex > this.dots.length) {
         pageIndex = pageIndex % this.dots.length
@@ -58,7 +76,8 @@
     },
     methods: {
       refreshSlider() {
-
+        this._setSliderWidth(true)
+        this.slider.refresh()
       },
       _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
@@ -71,7 +90,7 @@
           width += sliderWidth
           children.style.width = `${sliderWidth}px`
         }
-        if (this.loop) {
+        if (this.loop && !isResize) {
           width += 2 * sliderWidth
         }
         this.$refs.sliderGroup.style.width = `${width}px`
@@ -109,6 +128,7 @@
       }
     },
     beforeDestroy() {
+      this.slider.disable()
       clearTimeout(this.timer)
     }
   }

@@ -37,3 +37,29 @@
           transform translateY(-50%)
           background-color $color-theme
           content " "
+      .item
+        display flex
+        box-sizing border-box
+        padding 0 14px 20px
+        align-items center
+        .icon
+          flex 0 0 60px
+          width 60px
+          padding-right 20px
+        .text
+          display flex
+          flex 1
+          flex-direction column
+          justify-content center
+          line-height 20px
+          overflow hidden
+          font-size $font-size-medium
+          .name
+            margin-bottom 10px
+          .desc
+            color $color-text-d
+    .loading-container
+      position absolute
+      width 100%
+      top 50%
+      transform translateY(-50%)
