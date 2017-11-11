@@ -1,0 +1,44 @@
+@import "~common/stylus/common"
+
+.list-view
+  position fixed
+  top 88px
+  bottom 0
+  width 100%
+  overflow hidden
+  .list-group
+    padding-bottom 30px
+    .title
+      height 30px
+      line-height 30px
+      padding-left 20px
+      font-size $font-size-small
+      background $color-highlight-background
+    .list-group-item
+      display flex
+      align-items center
+      padding 20px 0 0 30px
+      .avatar
+        width 50px
+        height 50px
+        border-radius 50%
+      .name
+        margin-left 20px
+        font-size $font-size-medium
+  .list-shortcut
+    position absolute
+    top 50%
+    right 0
+    z-index 30
+    transform translateY(-50%)
+    width 20px
+    padding 20px 0
+    border-radius 10px
+    text-align center
+    background $color-highlight-background
+    .list-shortcut-item
+      padding 3px
+      color $color-text-d
+      font-size $font-size-small
+      &.active
+        color $color-theme

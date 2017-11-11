@@ -51,6 +51,12 @@
           probeType: this.probeType,
           click: this.click
         })
+
+        if (this.listenScroll) {
+          this.scroll.on('scroll', (pos) => {
+            this.$emit('scroll', pos)
+          })
+        }
       },
       refresh() {
         this.scroll && this.scroll.refresh()
