@@ -4,7 +4,7 @@
           :probeType="probeType"
           class="list-view"
           @scroll="scroll"
-          ref="scroll">
+          ref="listview">
     <ul>
       <li class="list-group" v-for="group in data" ref="listGroup">
         <h2 class="title">{{group.title}}</h2>
@@ -16,12 +16,18 @@
         </ul>
       </li>
     </ul>
-    <div class="list-shortcut">
+    <div class="list-shortcut" @touchmove.stop>
       <ul>
-        <li class="list-shortcut-item" :class="{'active': currentIndex === index}" v-for="(item,index) in shortList">{{item}}</li>
+        <li class="list-shortcut-item"
+            :class="{'active': currentIndex === index}"
+            v-for="(item,index) in shortList"
+            @click="scrollTo(index)">{{item}}
+        </li>
       </ul>
     </div>
-    <div class="top-title"></div>
+    <div class="top-title" ref="fixed" v-show="fixedTitle">
+      <h2 class="fixed-title">{{fixedTitle}}</h2>
+    </div>
   </scroll>
 </template>
 
@@ -29,7 +35,6 @@
   import Scroll from 'base/scroll/scroll'
 
   const TITLE_HEIGHT = 30
-  const ANCHOR_HEIGHT = 18
   export default {
     props: {
       data: {
@@ -54,6 +59,10 @@
       scroll(pos) {
         this.scrollY = pos.y
       },
+      scrollTo(index) {
+        this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 400)
+        this.scrollY = this.$refs.listview.scroll.y
+      },
       _calculateHeight() {
         const list = this.$refs.listGroup
 
@@ -64,10 +73,15 @@
           height += item.clientHeight
           this.listHeight.push(height)
         }
-        console.log(this.listHeight)
       }
     },
     computed: {
+      fixedTitle() {
+        if (this.scrollY > 0) {
+          return ''
+        }
+        return this.data[this.currentIndex] ? this.data[this.currentIndex].title : ''
+      },
       shortList() {
         return this.data.map((group) => {
           return group.title.substr(0, 1)
@@ -93,7 +107,12 @@
         }
       },
       diff(newDiff) {
-
+        let fixedTop = (newDiff > 0 && newDiff < TITLE_HEIGHT) ? newDiff - TITLE_HEIGHT : 0
+        if (this.fixedTop === fixedTop) {
+          return
+        }
+        this.fixedTop = fixedTop
+        this.$refs.fixed.style.transform = `translate3d(0,${fixedTop}px,0)`
       }
     },
     components: {

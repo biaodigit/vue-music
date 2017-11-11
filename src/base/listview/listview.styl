@@ -1,10 +1,9 @@
 @import "~common/stylus/common"
 
 .list-view
-  position fixed
-  top 88px
-  bottom 0
+  position relative
   width 100%
+  height 100%
   overflow hidden
   .list-group
     padding-bottom 30px
@@ -42,3 +41,16 @@
       font-size $font-size-small
       &.active
         color $color-theme
+  .top-title
+    position absolute
+    top 0
+    left 0
+    width 100%
+    .fixed-title
+      height 30px
+      line-height 30px
+      padding-left 20px
+      font-size $font-size-small
+      background $color-highlight-background
+
+
