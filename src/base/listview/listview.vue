@@ -9,7 +9,7 @@
       <li class="list-group" v-for="group in data" ref="listGroup">
         <h2 class="title">{{group.title}}</h2>
         <ul>
-          <li class="list-group-item" v-for="item in group.items">
+          <li @click="selectItem(item)" class="list-group-item" v-for="item in group.items">
             <img class="avatar" v-lazy="item.avatar">
             <span class="name">{{item.name}}</span>
           </li>
@@ -63,6 +63,9 @@
         this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 400)
         this.scrollY = this.$refs.listview.scroll.y
       },
+      selectItem(item) {
+        this.$emit('select', item)
+      },
       _calculateHeight() {
         const list = this.$refs.listGroup
 
@@ -88,6 +91,9 @@
         })
       }
     },
+    activated() {
+      this.$refs.listview && this.$refs.listview.refresh()
+    },
     watch: {
       data() {
         setTimeout(() => {
@@ -96,7 +102,6 @@
       },
       scrollY(newY) {
         const listHeight = this.listHeight
-
         for (let i = 0; i < listHeight.length; i++) {
           let height1 = listHeight[i]
           let height2 = listHeight[i + 1]
