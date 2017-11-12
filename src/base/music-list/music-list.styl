@@ -7,3 +7,63 @@
   width 100%
   z-index 100
   background $color-background
+  font-size 0
+  .back
+    position absolute
+    top 0
+    left 6px
+    z-index 50
+    .icon-back
+      display block
+      padding 10px
+      color $color-theme
+      font-size $font-size-large-x
+  .title
+    position absolute
+    width 80%
+    height 40px
+    top 0
+    left 10%
+    line-height 40px
+    z-index 50
+    text-align center
+    font-size $font-size-large
+    color $color-theme-text
+  .bg-image
+    position relative
+    width 100%
+    height 0
+    padding-top 70%
+    transform-origin top
+    background-size cover
+    .play-wrapper
+      position absolute
+      left 0
+      bottom 20px
+      width 100%
+      height 32px
+      z-index 50
+      .play-btn
+        box-sizing border-box
+        width 120px
+        margin 0 auto
+        padding 7px 0
+        text-align center
+        border-radius 100px
+        background $color-theme
+        color $color-theme-text
+        .icon-play
+          display inline-block
+          vertical-align middle
+          margin-right 6px
+          font-size $font-size-medium
+        .text
+          display inline-block
+          vertical-align middle
+          font-size $font-size-medium
+    .filter
+      position absolute
+      width 100%
+      top 0
+      bottom 0
+      background rgba(7, 17, 27, 0.4)

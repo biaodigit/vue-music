@@ -17,3 +17,18 @@ border-1px($color)
 border-none()
   &:after
     display none
+
+no-wrap()
+  text-overflow ellipsis
+  overflow hidden
+  white-space nowrap
+
+extend-click()
+  position relative
+  &:after
+    content ''
+    position absolute
+    top -10px
+    bottom -10px
+    right -10px
+    left -10px
