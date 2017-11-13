@@ -6,7 +6,7 @@
     <h1 class="title" v-html="title"></h1>
     <div class="bg-image" :style="bgStyle" ref="bgImage">
       <div class="play-wrapper" ref="playBtn">
-        <div class="play-btn">
+        <div class="play-btn" v-show="songs.length > 0">
           <i class="icon-play"></i>
           <span class="text">播放全部</span>
         </div>
@@ -18,7 +18,10 @@
             :listen-scroll="listenScroll" :data="songs"
             class="list-wrapper" ref="list">
       <div class="song-list-wrapper">
-        <song-list :rank="rank" :songs="songs"></song-list>
+        <song-list @select="selectSong" :rank="rank" :songs="songs"></song-list>
+      </div>
+      <div class="loading-container" v-show="!songs.length">
+        <loading title="加载中"></loading>
       </div>
     </scroll>
   </div>
@@ -27,7 +30,9 @@
 <script type="text/ecmascript-6">
   import SongList from 'base/song-list/song-list'
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   import {prefixStyle} from 'common/js/dom'
+  import {mapActions} from 'vuex'
 
   const RESERVED_HEIGHT = 100
   const transform = prefixStyle('transform')
@@ -71,8 +76,16 @@
       },
       scroll(pos) {
         this.scrollY = pos.y
-        console.log(this.scrollY)
-      }
+      },
+      selectSong(item, index) {
+        this.selectPlay({
+          list: this.songs,
+          index: index
+        })
+      },
+      ...mapActions([
+        'selectPlay'
+      ])
     },
     watch: {
       scrollY(newY) {
@@ -107,7 +120,8 @@
     },
     components: {
       SongList,
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>

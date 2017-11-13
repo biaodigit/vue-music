@@ -5,7 +5,7 @@
         <div class="rank">
           <span :class="getIconCls(index)" v-text="getRankText(index)"></span>
         </div>
-        <div class="content">
+        <div class="content" @click="selectSong(item,index)">
           <h2 class="name">{{item.name}}</h2>
           <p class="desc">{{getDesc(item)}}</p>
         </div>
@@ -53,6 +53,9 @@
             return index + 1
           }
         }
+      },
+      selectSong(item, index) {
+        this.$emit('select', item, index)
       }
     }
   }

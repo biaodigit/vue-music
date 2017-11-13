@@ -1,0 +1,46 @@
+@import "~common/stylus/common"
+
+.player
+  .normal-player
+    position fixed
+    top 0
+    bottom 0
+    width 100%
+    z-index 150
+    background $color-player-background
+    .background
+      position absolute
+      width 100%
+      height 100%
+      z-index -1
+      opacity 0.6
+      filter blur(20px)
+    .top
+      position relative
+      margin-bottom 25px
+      .back
+        position absolute
+        top 0
+        left 6px
+        z-index 50
+        .icon-back
+          display block
+          padding 9px
+          color $color-theme
+          font-size $font-size-large-x
+          transform rotate(-90deg)
+      .title
+        width 70%
+        margin 0 auto
+        text-align center
+        color $color-theme-text
+        .song
+          line-height 40px
+          font-size $font-size-large
+        .singer
+          font-size $font-size-medium
+    .middle
+      position absolute
+      top 80px
+      bottom 170px
+      width 100%

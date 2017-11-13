@@ -20,7 +20,7 @@ let vendor = (() => {
     Moz: 'MozTransform',
     O: 'OTransform',
     ms: 'msTransform',
-    standard: 'transform'
+    standard: 'Transform'
   }
 
   for (let key in transformNames) {
@@ -36,7 +36,6 @@ export function prefixStyle(style) {
   if (vendor === false) {
     return false
   }
-
   if (vendor === 'standard') {
     return style
   }
