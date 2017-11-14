@@ -1,5 +1,5 @@
 <template>
-  <div class="tab border-1px">
+  <div class="tab border-1px-bottom">
     <router-link to="/recommend" tag="div" class="tab-item">
       <span class="tab-link">推荐</span>
     </router-link>
