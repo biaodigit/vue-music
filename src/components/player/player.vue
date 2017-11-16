@@ -36,14 +36,14 @@
             <div class="icon left">
               <i class="icon-sequence"></i>
             </div>
-            <div class="icon left">
-              <i class="icon-prev"></i>
+            <div class="icon left" :class="disableCls">
+              <i @click="prev" class="icon-prev"></i>
             </div>
-            <div class="icon center">
+            <div class="icon center" :class="disableCls">
               <i @click="togglePlaying" :class="playIcon"></i>
             </div>
-            <div class="icon right">
-              <i class="icon-next"></i>
+            <div class="icon right" :class="disableCls">
+              <i @click="next" class="icon-next"></i>
             </div>
             <div class="icon right">
               <i class="icon-not-favorite"></i>
@@ -55,7 +55,9 @@
     <transition name="mini">
       <div class="mini-player border-1px-top" @click="open" v-show="!fullScreen">
         <div class="icon">
-          <img ref="miniImage" class="mini-img" :class="cdPlayCls" width="40" height="40" :src="currentSong.image">
+          <div class="imgWrapper" ref="miniWrapper">
+            <img ref="miniImage" class="mini-img" :class="cdPlayCls" width="40" height="40" :src="currentSong.image">
+          </div>
         </div>
         <div class="text">
           <h1 class="name" v-html="currentSong.name"></h1>
@@ -69,7 +71,7 @@
         </div>
       </div>
     </transition>
-    <audio :src="currentSong.url" ref="audio"></audio>
+    <audio :src="currentSong.url" @play="ready" @error="error"  ref="audio"></audio>
   </div>
 </template>
 
@@ -81,6 +83,11 @@
   const transform = prefixStyle('transform')
 
   export default {
+    data() {
+      return {
+        songReady: false
+      }
+    },
     methods: {
       back() {
         this.setFullScreen(false)
@@ -148,23 +155,65 @@
         }
       },
       togglePlaying() {
-        this.setPlaying(!this.playing)
+        if (!this.songReady) {
+          return
+        }
+        this.setPlayingState(!this.playing)
+      },
+      next() {
+        if (!this.songReady) {
+          return
+        }
+        let index = this.currentIndex + 1
+        if (index === this.playlist.length - 1) {
+          index = 0
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying(true)
+        }
+        this.songReady = false
+      },
+      prev() {
+        if (!this.songReady) {
+          return
+        }
+        let index = this.currentIndex - 1
+        if (index === -1) {
+          index = this.playlist.length - 1
+        }
+        this.setCurrentIndex(index)
+        if (!this.playing) {
+          this.togglePlaying(true)
+        }
+        this.songReady = false
+      },
+      ready() {
+        this.songReady = true
+      },
+      error() {
+        this.songReady = true
       },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
-        setPlaying: 'SET_PLAYING_STATE'
+        setPlayingState: 'SET_PLAYING_STATE',
+        setCurrentIndex: 'SET_CURRENT_INDEX'
       })
     },
     watch: {
       currentSong() {
-        this.$nextTick(() => {
+        clearTimeout(this.timer)
+        this.timer = setTimeout(() => {
           this.$refs.audio.play()
-        })
+        }, 1000)
       },
       playing(newPlay) {
+        if (!this.songReady) {
+          return
+        }
         let audio = this.$refs.audio
         this.$nextTick(() => {
-          this.playing ? audio.play() : audio.pause()
+          newPlay ? audio.play() : audio.pause()
         })
       }
     },
@@ -178,11 +227,15 @@
       cdPlayCls() {
         return this.playing ? 'play' : 'play pause'
       },
+      disableCls() {
+        return this.songReady ? '' : 'disable'
+      },
       ...mapGetters([
         'playing',
         'fullScreen',
         'currentSong',
-        'playlist'
+        'playlist',
+        'currentIndex'
       ])
     }
   }
