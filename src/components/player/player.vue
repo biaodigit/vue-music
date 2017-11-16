@@ -1,5 +1,5 @@
 <template>
-  <div class="player" v-show="playing">
+  <div class="player" v-show="playlist.length">
     <transition name="normal"
                 @enter="enter"
                 @after-enter="afterEnter"
@@ -21,7 +21,7 @@
         <div class="middle">
           <div class="middle-l">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd">
+              <div class="cd" :class="cdPlayCls">
                 <img class="cd-img" :src="currentSong.image">
               </div>
             </div>
@@ -40,7 +40,7 @@
               <i class="icon-prev"></i>
             </div>
             <div class="icon center">
-              <i class="icon-play"></i>
+              <i @click="togglePlaying" :class="playIcon"></i>
             </div>
             <div class="icon right">
               <i class="icon-next"></i>
@@ -55,20 +55,21 @@
     <transition name="mini">
       <div class="mini-player border-1px-top" @click="open" v-show="!fullScreen">
         <div class="icon">
-          <img ref="miniImage" class="mini-img" width="40" height="40" :src="currentSong.image">
+          <img ref="miniImage" class="mini-img" :class="cdPlayCls" width="40" height="40" :src="currentSong.image">
         </div>
         <div class="text">
           <h1 class="name" v-html="currentSong.name"></h1>
           <p class="singer" v-html="currentSong.singer"></p>
         </div>
         <div class="control">
-          <i class="icon-mini icon-play-mini"></i>
+          <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
         </div>
         <div class="control">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <audio :src="currentSong.url" ref="audio"></audio>
   </div>
 </template>
 
@@ -88,7 +89,7 @@
         this.setFullScreen(true)
       },
       enter(el, done) {
-        let {x, y, scale} = this._getPosAndScale()
+        let {x, y, scale} = this.$_getPosAndScale()
 
         let animation = {
           0: {
@@ -119,7 +120,7 @@
       },
       leave(el, done) {
         this.$refs.cdWrapper.style.transition = 'all 0.4s'
-        let {x, y, scale} = this._getPosAndScale()
+        let {x, y, scale} = this.$_getPosAndScale()
         this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`
         const timer = setTimeout(done, 400)
         this.$refs.cdWrapper.addEventListener('transitionend', () => {
@@ -131,7 +132,7 @@
         this.$refs.cdWrapper.style.transition = ''
         this.$refs.cdWrapper.style[transform] = ''
       },
-      _getPosAndScale() {
+      $_getPosAndScale() {
         let targetWidth = 40
         let paddingTop = 80
         let paddingLeft = 40
@@ -146,15 +147,42 @@
           scale
         }
       },
+      togglePlaying() {
+        this.setPlaying(!this.playing)
+      },
       ...mapMutations({
-        setFullScreen: 'SET_FULL_SCREEN'
+        setFullScreen: 'SET_FULL_SCREEN',
+        setPlaying: 'SET_PLAYING_STATE'
       })
     },
+    watch: {
+      currentSong() {
+        this.$nextTick(() => {
+          this.$refs.audio.play()
+        })
+      },
+      playing(newPlay) {
+        let audio = this.$refs.audio
+        this.$nextTick(() => {
+          this.playing ? audio.play() : audio.pause()
+        })
+      }
+    },
     computed: {
+      playIcon() {
+        return this.playing ? 'icon-pause' : 'icon-play'
+      },
+      miniIcon() {
+        return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
+      },
+      cdPlayCls() {
+        return this.playing ? 'play' : 'play pause'
+      },
       ...mapGetters([
         'playing',
         'fullScreen',
-        'currentSong'
+        'currentSong',
+        'playlist'
       ])
     }
   }

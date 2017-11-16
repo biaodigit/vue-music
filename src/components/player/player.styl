@@ -73,6 +73,10 @@
               border-radius 50%
               box-sizing border-box
               border: 10px solid rgba(255, 255, 255, 0.1)
+            &.play
+              animation rotate 20s linear infinite
+            &.pause
+              animation-play-state paused
     .bottom
       position absolute
       bottom 50px
@@ -124,6 +128,10 @@
       padding 0 10px 0 20px
       .mini-img
         border-radius 50%
+        &.play
+          animation rotate 10s linear infinite
+        &.pause
+          animation-play-state paused
     .text
       flex 1
       display flex
@@ -151,3 +159,8 @@
     &.mini-enter, &.mini-leave-to
       opacity 0
 
+  @keyframes rotate
+    0%
+      transform rotate(0)
+    100%
+      transform rotate(360deg)
