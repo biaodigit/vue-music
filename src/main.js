@@ -19,5 +19,21 @@ new Vue({
   el: '#app',
   router,
   store,
-  render: h => h(App)
+  render: h => h(App),
+  data() {
+    return {
+      once: 0
+    }
+  },
+  mounted() {
+    document.onclick = () => {
+      this.once++
+      if (this.once <= 1) {
+        let audio = document.getElementById('audio')
+        audio.play()
+      } else {
+        document.onclick = null
+      }
+    }
+  }
 })

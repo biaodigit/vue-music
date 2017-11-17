@@ -68,7 +68,7 @@
       if (pageIndex > this.dots.length) {
         pageIndex = pageIndex % this.dots.length
       }
-      this.scroll.goToPage(pageIndex, 0, 0)
+      this.slider.goToPage(pageIndex, 0, 0)
       this.currentPageIndex = pageIndex - 1
       if (this.autoPlay) {
         this._play()
