@@ -29,7 +29,7 @@ new Vue({
     document.onclick = () => {
       this.once++
       if (this.once <= 1) {
-        let audio = document.getElementById('audio')
+        let audio = document.querySelector('audio')
         audio.play()
       } else {
         document.onclick = null

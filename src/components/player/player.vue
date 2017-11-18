@@ -31,7 +31,11 @@
         </div>
         <div class="bottom">
           <div class="dot-wrapper"></div>
-          <div class="progress-wrapper"></div>
+          <div class="progress-wrapper">
+            <span class="time time-l">{{format(currentTime)}}</span>
+            <div class="progress-bar-wrapper"></div>
+            <span class="time time-r">{{format(currentSong.duration)}}</span>
+          </div>
           <div class="handle-wrapper">
             <div class="icon left">
               <i class="icon-sequence"></i>
@@ -71,7 +75,11 @@
         </div>
       </div>
     </transition>
-    <audio id="audio" :src="currentSong.url" @play="ready" @error="error"  ref="audio"></audio>
+    <audio :src="currentSong.url"
+           @play="ready"
+           @error="error"
+           @timeupdate="updateTime"
+           ref="audio"></audio>
   </div>
 </template>
 
@@ -85,7 +93,8 @@
   export default {
     data() {
       return {
-        songReady: false
+        songReady: false,
+        currentTime: 0
       }
     },
     methods: {
@@ -193,6 +202,23 @@
       },
       error() {
         this.songReady = true
+      },
+      updateTime(e) {
+        this.currentTime = e.target.currentTime
+      },
+      format(time) {
+        time = time | 0
+        let minute = time / 60 | 0
+        let second = this.$_formatTime(time % 60)
+        return `${minute}:${second}`
+      },
+      $_formatTime(time) {
+        let len = time.toString().length
+        while (len < 2) {
+          time = `0${time}`
+          len++
+        }
+        return time
       },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
