@@ -1,1 +1,29 @@
 @import "~common/stylus/common"
+
+.progress-bar
+  height 30px
+  .bar-inner
+    position relative
+    height 4px
+    top 13px
+    background rgba(0, 0, 0, 0.3)
+    .progress
+      position absolute
+      height 100%
+      background $color-theme
+    .progress-btn-wrapper
+      position absolute
+      left -8px
+      top -13px
+      height 30px
+      width 30px
+      .progress-btn
+        position relative
+        top 7px
+        left 7px
+        width 16px
+        height 16px
+        box-sizing border-box
+        border-radius 50%
+        border 3px solid $color-theme-text
+        background $color-theme
