@@ -230,11 +230,14 @@
       })
     },
     watch: {
-      currentSong() {
-        clearTimeout(this.timer)
-        this.timer = setTimeout(() => {
-          this.$refs.audio.play()
-        }, 1000)
+      currentSong: {
+        handler() {
+          clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
+            this.$refs.audio.play()
+          }, 800)
+        },
+        sync: true
       },
       playing(newPlay) {
         if (!this.songReady) {
