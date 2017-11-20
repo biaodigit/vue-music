@@ -21,11 +21,13 @@
         width 100%
         height 100%
     .recommend-list
+      margin 0 10px
       .list-title
-        position relative
+        position absolute
+        left 0
         height 65px
         line-height 65px
-        padding-left 12px
+        padding-left 10px
         font-size $font-size-large
         color $color-text
         &:before
@@ -37,27 +39,40 @@
           transform translateY(-50%)
           background-color $color-theme
           content " "
-      .item
-        display flex
-        box-sizing border-box
-        padding 0 14px 20px
-        align-items center
-        .icon
-          flex 0 0 60px
-          width 60px
-          padding-right 20px
-        .text
-          display flex
-          flex 1
-          flex-direction column
-          justify-content center
-          line-height 20px
+      .list
+        position relative
+        top 65px
+        overflow hidden
+        margin-right -10px
+        .item
+          display inline-block
+          width 50%
+          padding-right 10px
+          margin-bottom 10px
           overflow hidden
-          font-size $font-size-medium
-          .name
-            margin-bottom 10px
-          .desc
-            color $color-text-d
+          box-sizing border-box
+          .icon
+            position relative
+            width 100%
+            height 0
+            padding-top 90%
+            img
+              position absolute
+              top 0
+              left 0
+              width 100%
+              height 100%
+          .text
+            display flex
+            flex-direction column
+            justify-content center
+            line-height 20px
+            font-size $font-size-medium
+            .name
+              margin-bottom 10px
+            .desc
+              no-wrap()
+              color $color-text-d
     .loading-container
       position absolute
       width 100%

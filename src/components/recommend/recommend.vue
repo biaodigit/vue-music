@@ -15,7 +15,7 @@
         </div>
         <div class="recommend-list">
           <h1 class="list-title">热门歌单</h1>
-          <ul>
+          <ul class="list">
             <li class="item" v-for="(item,index) in discList">
               <div class="icon">
                 <img width="60" height="60" v-lazy="item.imgurl">

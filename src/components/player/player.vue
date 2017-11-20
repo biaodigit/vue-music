@@ -88,7 +88,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import ProgressBar from 'components/progress-bar/progress-bar'
+  import ProgressBar from 'base/progress-bar/progress-bar'
   import {mapGetters, mapMutations} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
