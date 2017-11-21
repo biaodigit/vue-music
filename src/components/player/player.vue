@@ -18,19 +18,33 @@
             <p class="singer" v-html="currentSong.singer"></p>
           </div>
         </div>
-        <div class="middle">
+        <div class="middle"
+             @touchstart.prevent="middleTouchStart"
+             @touchmove.prevent="middleTouchMove"
+             @touchend="middleTouchEnd">
           <div class="middle-l">
             <div class="cd-wrapper" ref="cdWrapper">
               <div class="cd" :class="cdPlayCls">
                 <img class="cd-img" :src="currentSong.image">
               </div>
             </div>
-            <div class="lyric-wrapper"></div>
+            <div class="playing-lyric-wrapper"></div>
           </div>
-          <div class="middle-r"></div>
+          <scroll :data="currentLyric && currentLyric.lines" class="middle-r" ref="lyricList">
+            <div class="lyric-wrapper">
+              <ul v-if="currentLyric">
+                <li class="lyric" :class="{'current': currentLineNum === index}"
+                    v-for="(line,index) in currentLyric.lines" ref="lyricLine">{{line.txt}}
+                </li>
+              </ul>
+            </div>
+          </scroll>
         </div>
         <div class="bottom">
-          <div class="dot-wrapper"></div>
+          <div class="dot-wrapper">
+            <span class="dot" :class="{'active': currentShow === 'cd'}"></span>
+            <span class="dot" :class="{'active': currentShow === 'lyric'}"></span>
+          </div>
           <div class="progress-wrapper">
             <span class="time time-l">{{format(currentTime)}}</span>
             <div class="progress-bar-wrapper">
@@ -88,10 +102,12 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import Scroll from 'base/scroll/scroll'
   import ProgressBar from 'base/progress-bar/progress-bar'
   import {mapGetters, mapMutations} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
+  import Lyric from 'lyric-parser'
 
   const transform = prefixStyle('transform')
 
@@ -99,8 +115,14 @@
     data() {
       return {
         songReady: false,
-        currentTime: 0
+        currentTime: 0,
+        currentLyric: null,
+        currentLineNum: 0,
+        currentShow: 'cd'
       }
+    },
+    created() {
+      this.touch = {}
     },
     methods: {
       back() {
@@ -235,6 +257,35 @@
           this.togglePlaying()
         }
       },
+      getLyric() {
+        this.currentSong.getLyric().then((lyric) => {
+          this.currentLyric = new Lyric(lyric, this.handleLyric)
+          if (this.playing) {
+            this.currentLyric.play()
+          }
+        })
+      },
+      handleLyric({lineNum, txt}) {
+        this.currentLineNum = lineNum
+        if (lineNum > 6) {
+          let lineEl = this.$refs.lyricLine[lineNum - 5]
+          this.$refs.lyricList.scrollToElement(lineEl, 1000)
+        } else {
+          this.$refs.lyricList.scrollTo(0, 0, 1000)
+        }
+      },
+      middleTouchStart(e) {
+        this.touch.initiated = true
+        this.touch.startX = e.touches[0].pageX
+      },
+      middleTouchMove(e) {
+//        if (!this.touch.initiated) {
+//          return
+//        }
+//        let moveX = e.touches[0].pageX - this.touch.startX
+      },
+      middleTouchEnd() {
+      },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE',
@@ -247,6 +298,7 @@
           clearTimeout(this.timer)
           this.timer = setTimeout(() => {
             this.$refs.audio.play()
+            this.getLyric()
           }, 800)
         },
         sync: true
@@ -286,7 +338,8 @@
       ])
     },
     components: {
-      ProgressBar
+      ProgressBar,
+      Scroll
     }
   }
 </script>
