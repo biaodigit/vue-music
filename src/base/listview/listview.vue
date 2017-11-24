@@ -60,7 +60,7 @@
         this.scrollY = pos.y
       },
       scrollTo(index) {
-        this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 400)
+        this.$refs.listview.scrollToElement(this.$refs.listGroup[index], 0)
         this.scrollY = this.$refs.listview.scroll.y
       },
       selectItem(item) {
