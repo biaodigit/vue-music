@@ -249,7 +249,7 @@
         if (this.mode === playMode.loop) {
           this.loop()
         } else {
-          this.next()
+          this._next()
         }
       },
       loop() {
@@ -258,6 +258,20 @@
         this.setPlayingState(true)
         if (this.currentLyric) {
           this.currentLyric.seek(0)
+        }
+      },
+      _next() {
+        if (!this.songReady) {
+          return
+        }
+        if (this.playlist.length === 1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex++
+          if (index === this.playlist.length) {
+            index = 0
+          }
+          this.setCurrentIndex(index)
         }
       },
       updateTime(e) {
