@@ -96,10 +96,10 @@
         </div>
       </div>
     </transition>
-    <audio :src="currentSong.url"
-           @play="ready"
+    <audio @play="ready"
            @error="error"
            @ended="end"
+           @pause="paused"
            @timeupdate="updateTime"
            ref="audio"></audio>
   </div>
@@ -126,7 +126,8 @@
         currentLyric: null,
         currentLineNum: 0,
         currentShow: 'cd',
-        playingLyric: ''
+        playingLyric: '',
+        isPureMusic: false
       }
     },
     created() {
@@ -185,17 +186,15 @@
       },
       $_getPosAndScale() {
         let targetWidth = 40
-        let paddingTop = 80
         let paddingLeft = 40
-        let bottom = 30
+        let paddingTop = 80
+        let paddingBottom = 30
         let width = window.innerWidth * 0.8
         let x = -(window.innerWidth / 2 - paddingLeft)
-        let y = window.innerHeight - width / 2 - bottom - paddingTop
+        let y = window.innerHeight - paddingTop - paddingBottom - width / 2
         let scale = targetWidth / width
         return {
-          x,
-          y,
-          scale
+          x, y, scale
         }
       },
       togglePlaying() {
@@ -236,20 +235,29 @@
         this.songReady = false
       },
       ready() {
-        this.songReady = true
-        if (this.currentLyric) {
+        setTimeout(() => {
+          this.songReady = true
+        }, 500)
+        this.canPlayLyric = true
+        if (this.currentLyric && !this.isPureMusic) {
           this.currentLyric.seek(this.currentTime * 1000)
         }
       },
       error() {
         this.songReady = true
       },
+      paused() {
+        this.setPlayingState(false)
+        if (this.currentLyric) {
+          this.currentLyric.stop()
+        }
+      },
       end() {
         this.currentTime = 0
         if (this.mode === playMode.loop) {
           this.loop()
         } else {
-          this._next()
+          this.$_next()
         }
       },
       loop() {
@@ -260,7 +268,7 @@
           this.currentLyric.seek(0)
         }
       },
-      _next() {
+      $_next() {
         if (!this.songReady) {
           return
         }
@@ -309,16 +317,24 @@
       },
       getLyric() {
         this.currentSong.getLyric().then((lyric) => {
-          this.currentLyric = new Lyric(lyric, this.handleLyric)
-          if (this.playing) {
-            this.currentLyric.play()
+          if (this.currentSong.lyric !== lyric) {
+            return
           }
+          this.currentLyric = new Lyric(lyric, this.handleLyric)
+          this.isPureMusic = !this.currentLyric.lines.length
+          if (this.playing && this.canPlayLyric && !this.isPureMusic) {
+            this.currentLyric.seek(this.currentTime * 1000)
+          }
+        }).catch(() => {
+          this.currentLyric = null
+          this.playingLyric = ''
+          this.currentLineNum = 0
         })
       },
       handleLyric({lineNum, txt}) {
         this.currentLineNum = lineNum
-        if (lineNum > 6) {
-          let lineEl = this.$refs.lyricLine[lineNum - 6]
+        if (lineNum > 5) {
+          let lineEl = this.$refs.lyricLine[lineNum - 5]
           this.$refs.lyricList.scrollToElement(lineEl, 1000)
         } else {
           this.$refs.lyricList.scrollTo(0, 0, 1000)
@@ -326,27 +342,23 @@
         this.playingLyric = txt
       },
       middleTouchStart(e) {
-//        this.touch.initiated = true
-        this.touch.move = false
-        const touch = e.touches[0]
+        this.touch.moved = false
+        let touch = e.touches[0]
         this.touch.startX = touch.pageX
         this.touch.startY = touch.pageY
       },
       middleTouchMove(e) {
-//        if (!this.touch.initiated) {
-//          return
-//        }
-        const touch = e.touches[0]
-        const moveX = touch.pageX - this.touch.startX
-        const moveY = touch.pageY - this.touch.startY
+        let touch = e.touches[0]
+        let moveX = touch.pageX - this.touch.startX
+        let moveY = touch.pageY - this.touch.startY
         if (Math.abs(moveY) > Math.abs(moveX)) {
           return
         }
-        if (!this.touch.move) {
-          this.touch.move = true
+        if (!this.touch.moved) {
+          this.touch.moved = true
         }
         const left = this.currentShow === 'cd' ? 0 : -window.innerWidth
-        const offsetWidth = Math.max(-window.innerWidth, Math.min(0, left + moveX))
+        const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + moveX))
         this.touch.percent = Math.abs(offsetWidth / window.innerWidth)
         this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
         this.$refs.lyricList.$el.style[transitionDuration] = 0
@@ -354,7 +366,7 @@
         this.$refs.middleL.style[transitionDuration] = 0
       },
       middleTouchEnd() {
-        if (!this.touch.move) {
+        if (!this.touch.moved) {
           return
         }
         let offsetWidth
@@ -383,7 +395,6 @@
         this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`
         this.$refs.middleL.style.opacity = opacity
         this.$refs.middleL.style[transitionDuration] = `${time}ms`
-//        this.touch.initiated = false
       },
       changeMode() {
         let mode = (this.mode + 1) % 3
@@ -412,25 +423,23 @@
       })
     },
     watch: {
-      currentSong: {
-        handler(newSong, oldSong) {
-          if (newSong.id === oldSong.id) {
-            return
-          }
-          if (this.currentLyric) {
-            this.currentLyric.stop()
-            this.currentLyric = null
-            this.currentTime = 0
-            this.playingLyric = ''
-            this.currentLineNum = 0
-          }
-          clearTimeout(this.timer)
-          this.timer = setTimeout(() => {
-            this.$refs.audio.play()
-            this.getLyric()
-          }, 800)
-        },
-        sync: true
+      currentSong(newSong, oldSong) {
+        // 切换到随机播放模式防止歌曲暂停仍然播放
+        if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
+          return
+        }
+        this.songReady = false
+        this.canPlayLyric = false
+        if (this.currentLyric) {
+          this.currentLyric.stop()
+          this.currentLyric = null
+          this.currentTime = 0
+          this.playingLyric = ''
+          this.currentLineNum = 0
+        }
+        this.$refs.audio.src = newSong.url
+        this.$refs.audio.play()
+        this.getLyric()
       },
       playing(newPlay) {
         if (!this.songReady) {
