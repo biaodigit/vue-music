@@ -33,11 +33,13 @@
   import Loading from 'base/loading/loading'
   import {prefixStyle} from 'common/js/dom'
   import {mapActions} from 'vuex'
+  import {playlistMixin} from 'common/js/mixin'
 
   const RESERVED_HEIGHT = 100
   const transform = prefixStyle('transform')
 
   export default {
+    mixins: [playlistMixin],
     props: {
       songs: {
         type: Array,
@@ -87,6 +89,11 @@
         this.randomPlay({
           list: this.songs
         })
+      },
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : 0
+        this.$refs.list.$el.style.bottom = bottom
+        this.$refs.list.refresh()
       },
       ...mapActions([
         'selectPlay',

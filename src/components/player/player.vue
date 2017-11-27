@@ -360,41 +360,32 @@
         const left = this.currentShow === 'cd' ? 0 : -window.innerWidth
         const offsetWidth = Math.min(0, Math.max(-window.innerWidth, left + moveX))
         this.touch.percent = Math.abs(offsetWidth / window.innerWidth)
-        this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
-        this.$refs.lyricList.$el.style[transitionDuration] = 0
-        this.$refs.middleL.style.opacity = 1 - this.touch.percent
-        this.$refs.middleL.style[transitionDuration] = 0
+        this.$refs.middle.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+        this.$refs.middle.style[transitionDuration] = 0
       },
       middleTouchEnd() {
         if (!this.touch.moved) {
           return
         }
         let offsetWidth
-        let opacity
         if (this.currentShow === 'cd') {
           if (this.touch.percent > 0.2) {
             offsetWidth = -window.innerWidth
-            opacity = 0
             this.currentShow = 'lyric'
           } else {
             offsetWidth = 0
-            opacity = 1
           }
         } else {
           if (this.touch.percent < 0.8) {
             offsetWidth = 0
-            opacity = 1
             this.currentShow = 'cd'
           } else {
             offsetWidth = -window.innerWidth
-            opacity = 0
           }
         }
         const time = 400
-        this.$refs.lyricList.$el.style[transform] = `translate3d(${offsetWidth}px,0,0)`
-        this.$refs.lyricList.$el.style[transitionDuration] = `${time}ms`
-        this.$refs.middleL.style.opacity = opacity
-        this.$refs.middleL.style[transitionDuration] = `${time}ms`
+        this.$refs.middle.style[transform] = `translate3d(${offsetWidth}px,0,0)`
+        this.$refs.middle.style[transitionDuration] = `${time}ms`
       },
       changeMode() {
         let mode = (this.mode + 1) % 3

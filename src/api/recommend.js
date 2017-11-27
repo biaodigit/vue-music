@@ -16,8 +16,6 @@ export function getRecommend() {
 }
 
 export function getDiscList() {
-  // const url = debug ? '/api/getDiscList' : 'http://114.215.93.51:8010/music/api/getDiscList'
-
   const url = '/api/getDiscList'
 
   const data = Object.assign({}, commonParams, {
