@@ -41,6 +41,9 @@
                 </li>
               </ul>
             </div>
+            <div class="no-lyric-wrapper">
+              <p v-show="!hasLyric">{{noLyric}}</p>
+            </div>
           </scroll>
         </div>
         <div class="bottom">
@@ -117,6 +120,7 @@
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
+  const timeExp = /\[(\d{2}):(\d{2}):(\d{2})]/g
 
   export default {
     data() {
@@ -127,7 +131,8 @@
         currentLineNum: 0,
         currentShow: 'cd',
         playingLyric: '',
-        isPureMusic: false
+        hasLyric: false,
+        noLyric: ''
       }
     },
     created() {
@@ -239,7 +244,7 @@
           this.songReady = true
         }, 500)
         this.canPlayLyric = true
-        if (this.currentLyric && !this.isPureMusic) {
+        if (this.currentLyric && this.hasLyric) {
           this.currentLyric.seek(this.currentTime * 1000)
         }
       },
@@ -321,9 +326,14 @@
             return
           }
           this.currentLyric = new Lyric(lyric, this.handleLyric)
-          this.isPureMusic = !this.currentLyric.lines.length
-          if (this.playing && this.canPlayLyric && !this.isPureMusic) {
-            this.currentLyric.seek(this.currentTime * 1000)
+          this.hasLyric = this.currentLyric.lines.length
+          console.log(this.currentLyric)
+          if (!this.hasLyric) {
+            this.noLyric = this.playingLyric = this.currentLyric.lrc.replace(timeExp, '').trim()
+          } else {
+            if (this.playing && this.canPlayLyric) {
+              this.currentLyric.seek(this.currentTime * 1000)
+            }
           }
         }).catch(() => {
           this.currentLyric = null
