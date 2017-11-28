@@ -30,12 +30,12 @@
         getSingerDetail(this.singer.id).then((res) => {
           if (res.code === ERR_OK) {
             this.songs = this._formatSongList(res.data.list)
-            console.log(this.songs)
           }
         })
       },
       _formatSongList(list) {
         let ret = []
+        console.log(list)
         list.forEach((song) => {
           let {musicData} = song
           if (musicData.songid && musicData.albummid) {
