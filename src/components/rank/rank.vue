@@ -15,12 +15,16 @@
         </li>
       </ul>
     </scroll>
+    <div class="loading-container" v-show="!topList.length">
+      <loading title="加载中"></loading>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   import {getTopList} from 'api/rank'
   import {ERR_OK} from 'api/config'
   import {mapMutations} from 'vuex'
@@ -60,7 +64,8 @@
       })
     },
     components: {
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
