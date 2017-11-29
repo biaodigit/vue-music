@@ -2,7 +2,7 @@
   <div class="song-list">
     <ul>
       <li class="item" v-for="(item,index) in songs">
-        <div class="rank">
+        <div class="rank" :class="{'rankIcon': rank === true}">
           <span :class="getIconCls(index)" v-text="getRankText(index)"></span>
         </div>
         <div class="content" @click="selectSong(item,index)">

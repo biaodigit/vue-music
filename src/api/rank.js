@@ -6,8 +6,8 @@ export function getTopList() {
 
   const data = Object.assign({}, commonParams, {
     uin: 0,
-    needNewCode: 1,
-    platform: 'h5'
+    platform: 'h5',
+    needNewCode: 1
   })
 
   return jsonp(url, data, options)

@@ -29,6 +29,7 @@
     text-align center
     font-size $font-size-large
     color $color-theme-text
+    no-wrap()
   .bg-image
     position relative
     width 100%
@@ -79,6 +80,8 @@
     background $color-background
     .song-list-wrapper
       padding 20px 10px
+      &.isRank
+        padding 20px 30px
     .loading-container
       position absolute
       width 100%

@@ -13,10 +13,23 @@
       margin-right 10px
       text-align center
       font-size 0
+      &.rankIcon
+        margin-right 30px
       .text
         font-size $font-size-large
         &.firstToThird
           color $color-theme
+      .icon
+        display inline-block
+        width 25px
+        height 24px
+        background-size 25px 24px
+        &.icon0
+          bg-image('first')
+        &.icon1
+          bg-image('second')
+        &.icon2
+          bg-image('third')
     .content
       flex 1
       line-height 20px

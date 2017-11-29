@@ -10,6 +10,8 @@ const Search = () => import('components/search/search')
 const UserCenter = () => import('components/user-center/user-center')
 const SingerDetail = () => import('components/singer-detail/singer-detail')
 const Disc = () => import('components/disc/disc')
+const TopList = () => import('components/top-list/top-list')
+
 export default new Router({
   routes: [
     {
@@ -38,7 +40,13 @@ export default new Router({
     },
     {
       path: '/rank',
-      component: Rank
+      component: Rank,
+      children: [
+        {
+          path: ':id',
+          component: TopList
+        }
+      ]
     },
     {
       path: '/search',
