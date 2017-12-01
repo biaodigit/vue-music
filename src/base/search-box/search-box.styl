@@ -1,36 +1,21 @@
 @import "~common/stylus/common"
 
 .search-box
+  position relative
   display flex
   align-items center
-  box-sizing border-box
-  padding 10px
-  background $color-highlight-background
-  .box-wrapper
-    position relative
-    flex 1
-    display flex
-    align-items center
-    height 36px
-    padding 0 6px
-    background $color-background
-    .icon-search
-      font-size 18px
-    .box
-      width 100%
-      height 20px
-      line-height 20px
-      margin 0 5px
-      font-size $font-size-medium
-      outline none
-    .icon-dismiss
-      font-size 16px
-      color $color-text-d
-  .cancel
-    flex 0 0 48px
-    width 48px
-    height 36px
-    line-height 36px
-    padding 0 10px
-    box-sizing border-box
-    font-size 14px
+  height 36px
+  padding 0 6px
+  background $color-background
+  .icon-search
+    font-size 18px
+  .box
+    width 100%
+    height 20px
+    line-height 20px
+    margin 0 5px
+    font-size $font-size-medium
+    outline none
+  .icon-dismiss
+    font-size 16px
+    color $color-text-d

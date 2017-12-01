@@ -4,7 +4,7 @@
       <slot></slot>
     </div>
     <div class="dots">
-      <span class="dot" :class="{'active': currentPageIndex === index}" v-for="(item,index) in dots"></span>
+      <span class="dot" :class="{'active': currentPageIndex === index}" v-for="(dot,index) in dots"></span>
     </div>
   </div>
 </template>
@@ -64,12 +64,12 @@
     },
     activated() {
       this.slider.enable()
-      let pageIndex = this.slider.getCurrentPage().pageX
-      if (pageIndex > this.dots.length) {
-        pageIndex = pageIndex % this.dots.length
+      let index = this.slider.getCurrentPage().pageX
+      if (index > this.dots.length) {
+        index = index % this.dots.length
       }
-      this.slider.goToPage(pageIndex, 0, 0)
-      this.currentPageIndex = pageIndex - 1
+      this.slider.goToPage(index, 0, 0)
+      this.currentPageIndex = index - 1
       if (this.autoPlay) {
         this._play()
       }
@@ -81,6 +81,7 @@
       },
       _setSliderWidth(isResize) {
         this.children = this.$refs.sliderGroup.children
+
         let width = 0
         let sliderWidth = this.$refs.slider.clientWidth
         for (let i = 0; i < this.children.length; i++) {
@@ -113,19 +114,22 @@
         this.dots = new Array(this.children.length)
       },
       _changePageIndex() {
-        let pageIndex = this.slider.getCurrentPage().pageX
-        this.currentPageIndex = pageIndex - 1
+        this.currentPageIndex = this.slider.getCurrentPage().pageX - 1
         if (this.autoPlay) {
           this._play()
         }
       },
       _play() {
-        let pageIndex = this.slider.getCurrentPage().pageX + 1
+        let index = this.slider.getCurrentPage().pageX + 1
         clearTimeout(this.timer)
         this.timer = setTimeout(() => {
-          this.slider.goToPage(pageIndex, 0, 400)
+          this.slider.goToPage(index, 0, 400)
         }, this.interval)
       }
+    },
+    deactivated() {
+      this.slider.disable()
+      clearTimeout(this.timer)
     },
     beforeDestroy() {
       this.slider.disable()

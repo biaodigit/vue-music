@@ -1,11 +1,8 @@
 <template>
   <div class="search-box">
-    <div class="box-wrapper">
-      <i class="icon-search"></i>
-      <input v-model="query" @focus="onFocus" :placeholder="placeholder" class="box"/>
-      <i class="icon-dismiss" @click="clearQuery" v-show="query"></i>
-    </div>
-    <div class="cancel" v-show="isFocus" @click="onBlur">取消</div>
+    <i class="icon-search"></i>
+    <input v-model="query" @focus="onFocus" :placeholder="placeholder" class="box"/>
+    <i class="icon-dismiss" @click="clearQuery" v-show="query"></i>
   </div>
 </template>
 
@@ -20,18 +17,15 @@
     data() {
       return {
         query: '',
-        isFocus: false
+        isFocus: null
       }
     },
     methods: {
       onFocus() {
-        this.isFocus = true
+        this.$emit('onFocus')
       },
       clearQuery() {
         this.query = ''
-      },
-      onBlur() {
-        this.isFocus = false
       }
     }
   }
