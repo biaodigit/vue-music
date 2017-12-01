@@ -1,7 +1,7 @@
 <template>
   <div class="search">
     <div class="search-box-wrapper">
-      <search-box @onFocus="onFocus" class="box"></search-box>
+      <search-box @onFocus="onFocus" ref="searchBox"></search-box>
       <div class="cancel" v-show="isFocus" @click="onBlur">取消</div>
     </div>
     <div class="hot-key-wrapper"></div>
