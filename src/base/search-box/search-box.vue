@@ -7,6 +7,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {deBounce} from 'common/js/util'
+
   export default {
     props: {
       placeholder: {
@@ -20,12 +22,20 @@
         isFocus: null
       }
     },
+    created() {
+      this.$watch('query', deBounce((newQuery) => {
+        this.$emit('query', newQuery)
+      }, 300))
+    },
     methods: {
       onFocus() {
         this.$emit('onFocus')
       },
       clearQuery() {
         this.query = ''
+      },
+      setQuery(query) {
+        this.query = query
       }
     }
   }
