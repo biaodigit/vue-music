@@ -1,6 +1,10 @@
 @import "~common/stylus/common"
 
 .search
+  position fixed
+  top 88px
+  bottom 0
+  width 100%
   .search-box-wrapper
     display flex
     align-items center
@@ -17,9 +21,6 @@
       box-sizing border-box
       font-size 14px
   .shortcut-wrapper
-    position fixed
-    top 164px
-    bottom 0
     width 100%
     .shortcut
       height 100%
@@ -37,3 +38,8 @@
           border 1px solid rgba(0, 0, 0, .6)
           border-radius 99px
           font-size $font-size-medium
+  .search-result-wrapper
+    position fixed
+    top 164px
+    bottom 0
+    width 100%

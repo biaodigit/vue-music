@@ -8,7 +8,7 @@
   import {getDisc} from 'api/recommend'
   import {mapGetters} from 'vuex'
   import {ERR_OK} from 'api/config'
-  import {createSong} from 'common/js/song'
+  import {createSong, isValidMusic} from 'common/js/song'
   import MusicList from 'components/music-list/music-list'
 
   export default {
@@ -35,7 +35,7 @@
       $_formatDiscList(list) {
         let ret = []
         list.forEach((item) => {
-          if (item.songid && item.albummid) {
+          if (isValidMusic(item)) {
             ret.push(createSong(item))
           }
         })

@@ -4,7 +4,7 @@
       <search-box @query="onQueryChange" @onFocus="onFocus" ref="searchBox"></search-box>
       <div class="cancel" v-show="isFocus" @click="onBlur">取消</div>
     </div>
-    <div class="shortcut-wrapper">
+    <div class="shortcut-wrapper" v-show="!query">
       <div class="shortcut">
         <div>
           <div class="hot-key-wrapper" v-show="!isFocus">
@@ -13,15 +13,20 @@
               <li @click="addQuery(item.k)" class="key" v-for="item in hotKey">{{item.k}}</li>
             </ul>
           </div>
-          <div class="search-history-wrapper"></div>
+          <div class="search-history-wrapper" v-show="isFocus"></div>
         </div>
       </div>
     </div>
+    <div class="search-result-wrapper" v-show="query">
+      <search-result :query="query"></search-result>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import SearchBox from 'base/search-box/search-box'
+  import SearchResult from 'components/search-result/search-result'
   import {getHotKey} from 'api/search'
   import {ERR_OK} from 'api/config'
   import {shuffle} from 'common/js/util'
@@ -48,6 +53,10 @@
         this.isFocus = true
       },
       onBlur() {
+        if (this.query) {
+          this.query = ''
+          this.$refs.searchBox.clearQuery()
+        }
         this.isFocus = false
       },
       $_getHotKey() {
@@ -70,7 +79,8 @@
       }
     },
     components: {
-      SearchBox
+      SearchBox,
+      SearchResult
     }
   }
 </script>

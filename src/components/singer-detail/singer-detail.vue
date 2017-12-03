@@ -9,7 +9,7 @@
   import {getSingerDetail} from 'api/singer'
   import {ERR_OK} from 'api/config'
   import {mapGetters} from 'vuex'
-  import {createSong} from 'common/js/song'
+  import {createSong, isValidMusic} from 'common/js/song'
 
   export default {
     data() {
@@ -39,7 +39,7 @@
         console.log(list)
         list.forEach((song) => {
           let {musicData} = song
-          if (musicData.songid && musicData.albummid) {
+          if (isValidMusic(musicData)) {
             ret.push(createSong(musicData))
           }
         })
