@@ -1,5 +1,8 @@
 <template>
-  <scroll :pullup="pullup" :data="result" @pullUp="searchMore" class="search-result">
+  <scroll :pullup="pullup"
+          :beforeScroll="beforeScroll"
+          :data="result"
+          @pullUp="searchMore" @beforeScroll="listScroll" class="search-result">
     <ul class="result-list">
       <li @click="selectItem(item)" v-for="item in result" class="item">
         <div class="icon">
@@ -11,12 +14,16 @@
       </li>
       <loading v-show="hasMore" title=""></loading>
     </ul>
+    <div v-show="!hasMore && !result.length" class="no-result-wrapper">
+      <no-result text="暂无搜索结果"></no-result>
+    </div>
   </scroll>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   import Loading from 'base/loading/loading'
+  import NoResult from 'base/no-result/no-result'
   import {search} from 'api/search'
   import {ERR_OK} from 'api/config'
   import {createSong, isValidMusic} from 'common/js/song'
@@ -41,7 +48,8 @@
         page: 1,
         hasMore: true,
         result: [],
-        pullup: true
+        pullup: true,
+        beforeScroll: true
       }
     },
     methods: {
@@ -66,6 +74,9 @@
             this.$_checkMore(res.data)
           }
         })
+      },
+      listScroll() {
+        this.$emit('listScroll')
       },
       $_initResult(data) {
         let ret = []
@@ -140,7 +151,8 @@
     },
     components: {
       Scroll,
-      Loading
+      Loading,
+      NoResult
     }
   }
 </script>

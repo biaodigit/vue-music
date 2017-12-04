@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="search-result-wrapper" v-show="query">
-      <search-result :query="query"></search-result>
+      <search-result @listScroll="blurInput" :query="query"></search-result>
     </div>
     <router-view></router-view>
   </div>
@@ -76,6 +76,9 @@
       onQueryChange(query) {
         this.query = query
         console.log(this.query)
+      },
+      blurInput() {
+        this.$refs.searchBox.blur()
       }
     },
     components: {
