@@ -1,5 +1,5 @@
 <template>
-  <scroll :data="result" class="search-result">
+  <scroll :pullup="pullup" :data="result" @pullUp="searchMore" class="search-result">
     <ul class="result-list">
       <li @click="selectItem(item)" v-for="item in result" class="item">
         <div class="icon">
@@ -9,12 +9,14 @@
           <p class="text" v-html="getName(item)"></p>
         </div>
       </li>
+      <loading v-show="hasMore" title=""></loading>
     </ul>
   </scroll>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
+  import Loading from 'base/loading/loading'
   import {search} from 'api/search'
   import {ERR_OK} from 'api/config'
   import {createSong, isValidMusic} from 'common/js/song'
@@ -38,7 +40,8 @@
       return {
         page: 1,
         hasMore: true,
-        result: []
+        result: [],
+        pullup: true
       }
     },
     methods: {
@@ -48,6 +51,19 @@
         search(query, this.page, this.showSinger, perpage).then((res) => {
           if (res.code === ERR_OK) {
             this.result = this.$_initResult(res.data)
+            this.$_checkMore(res.data)
+          }
+        })
+      },
+      searchMore() {
+        if (!this.hasMore) {
+          return
+        }
+        this.page++
+        search(this.query, this.page, this.showSinger, perpage).then((res) => {
+          if (res.code === ERR_OK) {
+            this.result = this.result.concat(this.$_initResult(res.data))
+            this.$_checkMore(res.data)
           }
         })
       },
@@ -71,6 +87,12 @@
           }
         })
         return ret
+      },
+      $_checkMore(data) {
+        const song = data.song
+        if (!song.list.length || (song.curnum + (song.curpage - 1) * perpage) >= song.totalnum) {
+          this.hasMore = false
+        }
       },
       getIcon(item) {
         if (item.type === TYPE_SINGER) {
@@ -117,7 +139,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Loading
     }
   }
 </script>
