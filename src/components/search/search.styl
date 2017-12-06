@@ -21,23 +21,37 @@
       box-sizing border-box
       font-size 14px
   .shortcut-wrapper
-    width 100%
-    .shortcut
+    position fixed
+    top 176px
+    bottom 0
+    left 15px
+    right 15px
+    overflow hidden
+    .hot-key-wrapper
+      .title
+        margin-bottom 15px
+        color $color-text-d
+      .key
+        display inline-block
+        box-sizing border-box
+        margin 0 20px 10px 0
+        padding 5px 10px
+        border 1px solid rgba(0, 0, 0, .6)
+        border-radius 99px
+        font-size $font-size-medium
+    .search-history-wrapper
       height 100%
-      overflow hidden
-      .hot-key-wrapper
-        margin 0 15px
-        .title
-          margin-bottom 15px
-          color $color-text-d
-        .key
-          display inline-block
-          box-sizing border-box
-          margin 0 20px 10px 0
-          padding 5px 10px
-          border 1px solid rgba(0, 0, 0, .6)
-          border-radius 99px
-          font-size $font-size-medium
+      .title
+        display flex
+        align-items center
+        color $color-text-d
+        .text
+          flex 1
+        .clear
+          extend-click()
+          .icon-clear
+            font-size $font-size-medium
+            color $color-text-d
   .search-result-wrapper
     position fixed
     top 164px

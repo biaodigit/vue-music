@@ -1,4 +1,5 @@
 import {playMode} from 'common/js/config'
+import {getSearchHistory} from 'common/js/storage'
 
 const state = {
   singer: {},
@@ -9,7 +10,8 @@ const state = {
   fullScreen: false,
   mode: playMode.sequence,
   disc: {},
-  topList: {}
+  topList: {},
+  searchHistory: getSearchHistory()
 }
 
 export default state
