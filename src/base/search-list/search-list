@@ -4,7 +4,8 @@
   height 100%
   overflow hidden
   .list
-    padding-bottom 20px
+    margin-top 10px
+    padding-bottom 30px
     .search-item
       display flex
       align-items center

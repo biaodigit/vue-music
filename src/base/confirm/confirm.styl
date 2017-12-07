@@ -1,0 +1,55 @@
+@import "~common/stylus/common"
+
+.confirm
+  position fixed
+  top 0
+  bottom 0
+  width 100%
+  z-index 999
+  background $color-background-d
+  &.fade-enter-active
+    animation fadeIn 0.3s
+    .confirm-content
+      animation zoomIn 0.3s
+  .confirm-wrapper
+    position absolute
+    top 50%
+    left 50%
+    transform translate(-50%, -50%)
+    z-index 1000
+    .confirm-content
+      width 270px
+      border-radius 13px
+      background $color-background
+      .text
+        padding 19px 15px
+        line-height 22px
+        text-align center
+        font-size $font-size-large
+        color $color-text-d
+      .operate
+        display flex
+        align-items center
+        text-align center
+        font-size $font-size-large
+        .operate-btn
+          flex 1
+          line-height 22px
+          padding 10px 0
+          border-top 1px solid $color-background-d
+          &.left
+            border-right 1px solid $color-background-d
+
+@keyframes fadeIn
+  0%
+    opacity 0
+  100%
+    opacity 1
+
+@keyframes zoomIn
+  0%
+    transform scale(0)
+  50%
+    transform scale(1.1)
+  100%
+    transform scale(1)

@@ -14,9 +14,9 @@
       <div class="search-history-wrapper" v-show="isFocus && searchHistory.length">
         <h3 class="title">
           <span class="text">搜索历史</span>
-          <span class="clear">
-                <i class="icon-clear"></i>
-              </span>
+          <span @click="showConfirm" class="clear">
+            <i class="icon-clear"></i>
+          </span>
         </h3>
         <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory" ref="searchList"></search-list>
       </div>
@@ -24,6 +24,7 @@
     <div class="search-result-wrapper" v-show="query">
       <search-result @select="saveSearch" @listScroll="blurInput" :query="query"></search-result>
     </div>
+    <confirm @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirm-text="清空" ref="confirm"></confirm>
     <router-view></router-view>
   </div>
 </template>
@@ -32,6 +33,7 @@
   import SearchBox from 'base/search-box/search-box'
   import SearchResult from 'components/search-result/search-result'
   import SearchList from 'base/search-list/search-list.vue'
+  import Confirm from 'base/confirm/confirm'
   import {getHotKey} from 'api/search'
   import {ERR_OK} from 'api/config'
   import {shuffle} from 'common/js/util'
@@ -91,9 +93,13 @@
       saveSearch() {
         this.saveSearchHistory(this.query)
       },
+      showConfirm() {
+        this.$refs.confirm.show()
+      },
       ...mapActions([
         'saveSearchHistory',
-        'deleteSearchHistory'
+        'deleteSearchHistory',
+        'clearSearchHistory'
       ])
     },
     computed: {
@@ -104,7 +110,8 @@
     components: {
       SearchBox,
       SearchResult,
-      SearchList
+      SearchList,
+      Confirm
     }
   }
 </script>
