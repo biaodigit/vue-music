@@ -94,11 +94,12 @@
         <div class="control">
           <i @click.stop="togglePlaying" class="icon-mini" :class="miniIcon"></i>
         </div>
-        <div class="control">
+        <div class="control" @click.stop="showPlaylist">
           <i class="icon-playlist"></i>
         </div>
       </div>
     </transition>
+    <play-list ref="playList"></play-list>
     <audio @play="ready"
            @error="error"
            @ended="end"
@@ -111,6 +112,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   import ProgressBar from 'base/progress-bar/progress-bar'
+  import PlayList from 'components/play-list/play-list'
   import {mapGetters, mapMutations} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
@@ -415,6 +417,9 @@
         })
         this.setCurrentIndex(index)
       },
+      showPlaylist() {
+        this.$refs.playList.show()
+      },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE',
@@ -483,7 +488,8 @@
     },
     components: {
       ProgressBar,
-      Scroll
+      Scroll,
+      PlayList
     }
   }
 </script>
