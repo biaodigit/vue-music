@@ -2,7 +2,7 @@
   <scroll :pullup="pullup"
           :beforeScroll="beforeScroll"
           :data="result"
-          @pullUp="searchMore" @beforeScroll="listScroll" class="search-result">
+          @pullUp="searchMore" @beforeScroll="listScroll" class="search-result" ref="scroll">
     <ul class="result-list">
       <li @click="selectItem(item)" v-for="item in result" class="item">
         <div class="icon">
@@ -133,6 +133,9 @@
           this.insertSong(item)
         }
         this.$emit('select')
+      },
+      refresh() {
+        this.$refs.scroll.refresh()
       },
       ...mapMutations({
         setSinger: 'SET_SINGER'

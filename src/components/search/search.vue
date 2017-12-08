@@ -4,7 +4,7 @@
       <search-box @query="onQueryChange" @onFocus="onFocus" ref="searchBox"></search-box>
       <div class="cancel" v-show="isFocus" @click="onBlur">取消</div>
     </div>
-    <div class="shortcut-wrapper" v-show="!query">
+    <div class="shortcut-wrapper" v-show="!query" ref="shortCut">
       <div class="hot-key-wrapper" v-show="!isFocus">
         <h3 class="title">热门搜索</h3>
         <ul>
@@ -18,11 +18,12 @@
             <i class="icon-clear"></i>
           </span>
         </h3>
-        <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory" ref="searchList"></search-list>
+        <search-list @delete="deleteSearchHistory" @select="addQuery" :searches="searchHistory"
+                     ref="searchList"></search-list>
       </div>
     </div>
-    <div class="search-result-wrapper" v-show="query">
-      <search-result @select="saveSearch" @listScroll="blurInput" :query="query"></search-result>
+    <div class="search-result-wrapper" v-show="query" ref="searchResult">
+      <search-result @select="saveSearch" @listScroll="blurInput" :query="query" ref="result"></search-result>
     </div>
     <confirm @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirm-text="清空" ref="confirm"></confirm>
     <router-view></router-view>
@@ -37,9 +38,11 @@
   import {getHotKey} from 'api/search'
   import {ERR_OK} from 'api/config'
   import {shuffle} from 'common/js/util'
+  import {playlistMixin} from 'common/js/mixin'
   import {mapActions, mapGetters} from 'vuex'
 
   export default {
+    mixins: [playlistMixin],
     data() {
       return {
         isFocus: false,
@@ -57,6 +60,15 @@
       }
     },
     methods: {
+      handlePlaylist(playlist) {
+        const bottom = playlist.length > 0 ? '60px' : ''
+
+        this.$refs.searchResult.style.bottom = bottom
+        this.$refs.result.refresh()
+
+        this.$refs.shortCut.style.bottom = bottom
+        this.$refs.searchList.refresh()
+      },
       onFocus() {
         this.isFocus = true
         this.$nextTick(() => {
@@ -101,6 +113,15 @@
         'deleteSearchHistory',
         'clearSearchHistory'
       ])
+    },
+    watch: {
+      query() {
+        if (this.isFocus) {
+          this.$nextTick(() => {
+            this.$refs.searchList.refresh()
+          })
+        }
+      }
     },
     computed: {
       ...mapGetters([

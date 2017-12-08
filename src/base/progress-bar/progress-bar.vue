@@ -75,8 +75,7 @@
       percent(newPercent) {
         this.setProgressOffset(newPercent)
       }
-    },
-    computed: {}
+    }
   }
 </script>
 
