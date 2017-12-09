@@ -19,6 +19,61 @@
     position absolute
     bottom 0
     width 100%
-    height 200px
     background $color-background
     border-1px-top($border-1px)
+    .top
+      display flex
+      align-items center
+      padding 20px 30px 10px 20px
+      .icon
+        margin-right 10px
+        font-size 30px
+        color $color-sub-theme
+      .text
+        flex 1
+        font-size $font-size-medium
+        color $color-text-d
+      .clear
+        extend-click()
+        .icon-clear
+          font-size $font-size-medium
+          color $color-text-d
+    .list
+      max-height 240px
+      overflow hidden
+      .item
+        display flex
+        align-items center
+        height 40px
+        padding 0 30px 0 20px
+        overflow hidden
+        &.list-enter-active, &.list-leave-active
+          transition all 0.1s
+        &.list-enter, &.list-leave-to
+          height 0
+        .current
+          flex 0 0 20px
+          width 20px
+          font-size $font-size-small
+          color $color-sub-theme
+        .text
+          flex 1
+          font-size $font-size-medium
+          color $color-theme-d
+          no-wrap()
+        .favourite
+          margin-right 15px
+          font-size $font-size-small
+          color $color-theme
+          extend-click()
+          .icon-favourite
+            color $color-sub-theme
+        .delete
+          font-size $font-size-small
+          color $color-theme
+          extend-click()
+    .close
+      line-height 50px
+      text-align center
+      font-size $font-size-medium-x
+      color $color-text-d
