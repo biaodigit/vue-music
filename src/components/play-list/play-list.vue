@@ -3,7 +3,7 @@
     <div class="play-list" @click="hide" v-show="showFlag">
       <div class="play-list-wrapper border-1px-top" @click.stop>
         <div class="top">
-          <i class="icon" :class="iconMode"></i>
+          <i @click="changeMode" class="icon" :class="iconMode"></i>
           <span class="text">{{modeText}}</span>
           <span class="clear" @click="clearPlaylist">
             <i class="icon-clear"></i>
@@ -34,9 +34,11 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   import {playMode} from 'common/js/config'
-  import {mapGetters, mapActions, mapMutations} from 'vuex'
+  import {playerMixin} from 'common/js/mixin'
+  import {mapActions} from 'vuex'
 
   export default {
+    mixins: [playerMixin],
     data() {
       return {
         showFlag: false
@@ -71,6 +73,9 @@
         }
         this.isDeleting = true
         this.deleteSong(item)
+        if (!this.playlist.length) {
+          return
+        }
         setTimeout(() => {
           this.isDeleting = false
         }, 300)
@@ -81,9 +86,6 @@
         })
         this.$refs.scroll.scrollToElement(this.$refs.list.$el.children[index], 300)
       },
-      ...mapMutations({
-        setCurrentIndex: 'SET_CURRENT_INDEX'
-      }),
       ...mapActions([
         'deleteSong',
         'clearPlaylist'
@@ -102,15 +104,7 @@
     computed: {
       modeText() {
         return this.mode === playMode.sequence ? '顺序播放' : this.mode === playMode.loop ? '循环播放' : '随机播放'
-      },
-      iconMode() {
-        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-      },
-      ...mapGetters([
-        'sequenceList',
-        'currentSong',
-        'mode'
-      ])
+      }
     },
     components: {
       Scroll

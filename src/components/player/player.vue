@@ -117,7 +117,7 @@
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
-  import {shuffle} from 'common/js/util'
+  import {playerMixin} from 'common/js/mixin'
   import Lyric from 'lyric-parser'
 
   const transform = prefixStyle('transform')
@@ -125,6 +125,7 @@
   const timeExp = /\[(\d{2}):(\d{2}):(\d{2})]/g
 
   export default {
+    mixins: [playerMixin],
     data() {
       return {
         songReady: false,
@@ -399,33 +400,12 @@
         this.$refs.middle.style[transform] = `translate3d(${offsetWidth}px,0,0)`
         this.$refs.middle.style[transitionDuration] = `${time}ms`
       },
-      changeMode() {
-        let mode = (this.mode + 1) % 3
-        this.setPlayMode(mode)
-        let list = null
-        if (mode === playMode.random) {
-          list = shuffle(this.sequenceList)
-        } else {
-          list = this.sequenceList
-        }
-        this.resetCurrentIndex(list)
-        this.setPlaylist(list)
-      },
-      resetCurrentIndex(list) {
-        let index = list.findIndex((item) => {
-          return item.id === this.currentSong.id
-        })
-        this.setCurrentIndex(index)
-      },
       showPlaylist() {
         this.$refs.playList.show()
       },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
-        setPlayingState: 'SET_PLAYING_STATE',
-        setCurrentIndex: 'SET_CURRENT_INDEX',
-        setPlayMode: 'SET_PLAY_MODE',
-        setPlaylist: 'SET_PLAYLIST'
+        setPlayingState: 'SET_PLAYING_STATE'
       })
     },
     watch: {
@@ -473,17 +453,10 @@
       percent() {
         return this.currentTime / this.currentSong.duration
       },
-      iconMode() {
-        return this.mode === playMode.sequence ? 'icon-sequence' : this.mode === playMode.loop ? 'icon-loop' : 'icon-random'
-      },
       ...mapGetters([
         'playing',
         'fullScreen',
-        'currentSong',
-        'playlist',
-        'sequenceList',
-        'currentIndex',
-        'mode'
+        'currentIndex'
       ])
     },
     components: {

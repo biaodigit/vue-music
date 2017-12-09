@@ -11,7 +11,8 @@ const state = {
   mode: playMode.sequence,
   disc: {},
   topList: {},
-  searchHistory: getSearchHistory()
+  searchHistory: getSearchHistory(),
+  favouriteList: []
 }
 
 export default state
