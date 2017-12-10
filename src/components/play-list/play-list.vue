@@ -5,7 +5,7 @@
         <div class="top">
           <i @click="changeMode" class="icon" :class="iconMode"></i>
           <span class="text">{{modeText}}</span>
-          <span class="clear" @click="showConfirm">
+          <span class="clear" @click="clear">
             <i class="icon-clear"></i>
           </span>
         </div>
@@ -27,7 +27,7 @@
           <span class="text">关闭</span>
         </div>
       </div>
-      <confirm ref="confirm" text="是否清空播放列表" confirm="清空" @confirm="confirmClear"></confirm>
+      <confirm v-model="showConfirm" ref="confirm" text="是否清空播放列表" confirm="清空" @confirm="confirmClear"></confirm>
       <toast v-model="showToast" :text="text" ref="toast"></toast>
     </div>
   </transition>
@@ -46,7 +46,8 @@
     data() {
       return {
         showFlag: false,
-        showToast: false
+        showToast: false,
+        showConfirm: false
       }
     },
     methods: {
@@ -91,8 +92,8 @@
         })
         this.$refs.scroll.scrollToElement(this.$refs.list.$el.children[index], 300)
       },
-      showConfirm() {
-        this.$refs.confirm.show()
+      clear() {
+        this.showConfirm = true
       },
       confirmClear() {
         this.clearPlaylist()

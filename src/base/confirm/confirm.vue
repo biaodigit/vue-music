@@ -28,7 +28,8 @@
       cancelText: {
         type: String,
         default: '取消'
-      }
+      },
+      value: Boolean
     },
     data() {
       return {
@@ -36,19 +37,19 @@
       }
     },
     methods: {
-      show() {
-        this.showFlag = true
-      },
-      hide() {
-        this.showFlag = false
-      },
       confirm() {
         this.$emit('confirm')
-        this.hide()
+        this.$emit('input', false)
+        this.showFlag = false
       },
       cancel() {
-        this.$emit('cancel')
-        this.hide()
+        this.$emit('input', false)
+        this.showFlag = false
+      }
+    },
+    watch: {
+      value(val) {
+        this.showFlag = val
       }
     }
   }

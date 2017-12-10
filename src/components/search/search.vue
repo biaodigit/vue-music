@@ -14,7 +14,7 @@
       <div class="search-history-wrapper" v-show="isFocus && searchHistory.length">
         <h3 class="title">
           <span class="text">搜索历史</span>
-          <span @click="showConfirm" class="clear">
+          <span class="clear">
             <i class="icon-clear"></i>
           </span>
         </h3>
@@ -25,7 +25,7 @@
     <div class="search-result-wrapper" v-show="query" ref="searchResult">
       <search-result @select="saveSearch" @listScroll="blurInput" :query="query" ref="result"></search-result>
     </div>
-    <confirm @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirm-text="清空" ref="confirm"></confirm>
+    <confirm v-model="showConfirm" @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirm-text="清空" ref="confirm"></confirm>
     <router-view></router-view>
   </div>
 </template>
@@ -47,7 +47,8 @@
       return {
         isFocus: false,
         hotKey: null,
-        query: ''
+        query: '',
+        showConfirm: false
       }
     },
     created() {
