@@ -28,6 +28,7 @@
         </div>
       </div>
       <confirm ref="confirm" text="是否清空播放列表" confirm="清空" @confirm="confirmClear"></confirm>
+      <toast :text="text" ref="toast"></toast>
     </div>
   </transition>
 </template>
@@ -35,6 +36,7 @@
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
   import Confirm from 'base/confirm/confirm'
+  import Toast from 'base/toast/toast'
   import {playMode} from 'common/js/config'
   import {playerMixin} from 'common/js/mixin'
   import {mapActions} from 'vuex'
@@ -117,7 +119,8 @@
     },
     components: {
       Scroll,
-      Confirm
+      Confirm,
+      Toast
     }
   }
 </script>

@@ -27,6 +27,11 @@ export const playlistMixin = {
 }
 
 export const playerMixin = {
+  data() {
+    return {
+      text: ''
+    }
+  },
   methods: {
     changeMode() {
       let mode = (this.mode + 1) % 3
@@ -49,9 +54,12 @@ export const playerMixin = {
     toggleFavorite(song) {
       if (this.isFavorite(song)) {
         this.deleteFavorite(song)
+        this.text = '取消收藏成功'
       } else {
         this.addFavorite(song)
+        this.text = '收藏成功'
       }
+      this.$refs.toast.show()
     },
     isFavorite(song) {
       let index = this.favoriteList.findIndex((item) => {

@@ -100,6 +100,7 @@
       </div>
     </transition>
     <play-list ref="playList"></play-list>
+    <toast :text="text" ref="toast"></toast>
     <audio @play="ready"
            @error="error"
            @ended="end"
@@ -113,6 +114,7 @@
   import Scroll from 'base/scroll/scroll'
   import ProgressBar from 'base/progress-bar/progress-bar'
   import PlayList from 'components/play-list/play-list'
+  import Toast from 'base/toast/toast'
   import {mapGetters, mapMutations} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
@@ -462,7 +464,8 @@
     components: {
       ProgressBar,
       Scroll,
-      PlayList
+      PlayList,
+      Toast
     }
   }
 </script>
