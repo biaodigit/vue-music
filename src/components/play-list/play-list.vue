@@ -5,7 +5,7 @@
         <div class="top">
           <i @click="changeMode" class="icon" :class="iconMode"></i>
           <span class="text">{{modeText}}</span>
-          <span class="clear" @click="clearPlaylist">
+          <span class="clear" @click="showConfirm">
             <i class="icon-clear"></i>
           </span>
         </div>
@@ -14,8 +14,8 @@
             <li :key="item.id" @click="selectItem(item)" class="item" v-for="item in sequenceList">
               <i class="current" :class="getCurrentCls(item)"></i>
               <span class="text" v-html="item.name"></span>
-              <span class="favourite">
-                <i class="icon-not-favorite"></i>
+              <span class="favorite" @click.stop="toggleFavorite(item)">
+                <i :class="iconFavorite(item)"></i>
               </span>
               <span class="delete" @click.stop="deleteItem(item)">
                 <i class="icon-delete"></i>
@@ -27,12 +27,14 @@
           <span class="text">关闭</span>
         </div>
       </div>
+      <confirm ref="confirm" text="是否清空播放列表" confirm="清空" @confirm="confirmClear"></confirm>
     </div>
   </transition>
 </template>
 
 <script type="text/ecmascript-6">
   import Scroll from 'base/scroll/scroll'
+  import Confirm from 'base/confirm/confirm'
   import {playMode} from 'common/js/config'
   import {playerMixin} from 'common/js/mixin'
   import {mapActions} from 'vuex'
@@ -86,6 +88,13 @@
         })
         this.$refs.scroll.scrollToElement(this.$refs.list.$el.children[index], 300)
       },
+      showConfirm() {
+        this.$refs.confirm.show()
+      },
+      confirmClear() {
+        this.clearPlaylist()
+        this.hide()
+      },
       ...mapActions([
         'deleteSong',
         'clearPlaylist'
@@ -107,7 +116,8 @@
       }
     },
     components: {
-      Scroll
+      Scroll,
+      Confirm
     }
   }
 </script>
