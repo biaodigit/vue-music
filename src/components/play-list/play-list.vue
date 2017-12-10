@@ -28,7 +28,7 @@
         </div>
       </div>
       <confirm ref="confirm" text="是否清空播放列表" confirm="清空" @confirm="confirmClear"></confirm>
-      <toast :text="text" ref="toast"></toast>
+      <toast v-model="showToast" :text="text" ref="toast"></toast>
     </div>
   </transition>
 </template>
@@ -45,7 +45,8 @@
     mixins: [playerMixin],
     data() {
       return {
-        showFlag: false
+        showFlag: false,
+        showToast: false
       }
     },
     methods: {

@@ -20,19 +20,28 @@
       delay: {
         type: Number,
         default: 1000
-      }
+      },
+      value: Boolean
     },
     data() {
       return {
         showFlag: false
       }
     },
-    methods: {
-      show() {
-        this.showFlag = true
-        this.timer = setTimeout(() => {
-          this.showFlag = false
-        }, this.delay)
+    watch: {
+      showFlag(val) {
+        if (val) {
+          this.$emit('input', true)
+
+          clearTimeout(this.timer)
+          this.timer = setTimeout(() => {
+            this.$emit('input', false)
+            this.showFlag = false
+          }, this.delay)
+        }
+      },
+      value(val) {
+        this.showFlag = val
       }
     },
     beforeDestroy() {

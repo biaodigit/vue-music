@@ -59,7 +59,7 @@ export const playerMixin = {
         this.addFavorite(song)
         this.text = '收藏成功'
       }
-      this.$refs.toast.show()
+      this.showToast = true
     },
     isFavorite(song) {
       let index = this.favoriteList.findIndex((item) => {

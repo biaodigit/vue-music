@@ -100,7 +100,7 @@
       </div>
     </transition>
     <play-list ref="playList"></play-list>
-    <toast :text="text" ref="toast"></toast>
+    <toast v-model="showToast" :text="text" ref="toast"></toast>
     <audio @play="ready"
            @error="error"
            @ended="end"
@@ -137,7 +137,8 @@
         currentShow: 'cd',
         playingLyric: '',
         hasLyric: false,
-        noLyric: ''
+        noLyric: '',
+        showToast: false
       }
     },
     created() {
