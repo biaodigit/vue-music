@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="toast" v-show="showFlag">
+    <div class="toast" v-show="showFlag" @click.stop @touchmove.stop.prevent>
       <div class="toast-wrapper">
         <div class="toast-content">
           <p class="text">{{text}}</p>
@@ -16,6 +16,10 @@
       text: {
         type: String,
         default: ''
+      },
+      delay: {
+        type: Number,
+        default: 1000
       }
     },
     data() {
@@ -26,10 +30,13 @@
     methods: {
       show() {
         this.showFlag = true
-        setTimeout(() => {
+        this.timer = setTimeout(() => {
           this.showFlag = false
-        }, 1000)
+        }, this.delay)
       }
+    },
+    beforeDestroy() {
+      clearTimeout(this.timer)
     }
   }
 </script>
