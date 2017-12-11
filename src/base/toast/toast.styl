@@ -1,48 +1,29 @@
 @import "~common/stylus/common"
 
 .toast
-  position fixed
-  top 0
-  bottom 0
-  width 100%
-  z-index 999
-  &.fade-enter-active
-    transition all 0.3s
-    .toast-content
-      animation fadeIn 0.3s
-  &.fade-leave-active
-    transition all 0.5s
-  &.fade-leave-to
-    .toast-content
-      animation fadeOut 0.5s
-  .toast-wrapper
+  .mask
+    position fixed
+    top 0
+    bottom 0
+    width 100%
+    z-index 998
+  .toast-content
     position absolute
     top 50%
     left 50%
     transform translate(-50%, -50%)
     z-index 1000
-    .toast-content
-      width 120px
-      height 40px
-      border-radius 10px
-      background black
-      opacity 0.5
-      .text
-        text-align center
-        color $color-theme-text
-        line-height 40px
-        font-size $font-size-medium-x
-
-@keyframes fadeIn
-  0%
-    transform scale(0)
-  50%
-    transform scale(1.1)
-  100%
-    transform scale(1)
-
-@keyframes fadeOut
-  0%
+    width 120px
+    height 40px
+    border-radius 10px
+    background black
     opacity 0.5
-  100%
-    opacity 0
+    &.fade-enter-active, &.fade-leave-active
+      transition all 0.3s
+    &.fade-enter, &.fade-leave-to
+      opacity 0
+    .text
+      text-align center
+      color $color-theme-text
+      line-height 40px
+      font-size $font-size-medium-x

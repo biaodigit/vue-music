@@ -14,7 +14,7 @@
       <div class="search-history-wrapper" v-show="isFocus && searchHistory.length">
         <h3 class="title">
           <span class="text">搜索历史</span>
-          <span class="clear">
+          <span @click="clear" class="clear">
             <i class="icon-clear"></i>
           </span>
         </h3>
@@ -106,8 +106,8 @@
       saveSearch() {
         this.saveSearchHistory(this.query)
       },
-      showConfirm() {
-        this.$refs.confirm.show()
+      clear() {
+        this.showConfirm = true
       },
       ...mapActions([
         'saveSearchHistory',
