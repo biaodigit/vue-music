@@ -1,13 +1,11 @@
 <template>
   <div class="toast">
-    <div class="mask" v-show="showFlag"  @click.stop @touchmove.stop.prevent></div>
-    <div class="toast-wrapper">
-      <transition name="fade">
-        <div class="toast-content" v-show="showFlag">
-          <p class="text">{{text}}</p>
-        </div>
-      </transition>
-    </div>
+    <div class="mask" v-show="showFlag" @click.stop @touchmove.stop.prevent></div>
+    <transition :name="currentTransition">
+      <div class="toast-content" v-show="showFlag">
+        <p class="text">{{text}}</p>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -22,11 +20,22 @@
         type: Number,
         default: 1000
       },
+      animatePos: {
+        type: String,
+        default: 'middle'
+      },
       value: Boolean
     },
     data() {
       return {
         showFlag: false
+      }
+    },
+    computed: {
+      currentTransition() {
+        if (this.animatePos === 'middle') {
+          return 'vud-toast-middle'
+        }
       }
     },
     watch: {
