@@ -221,29 +221,35 @@
         if (!this.songReady) {
           return
         }
-        let index = this.currentIndex + 1
-        if (index === this.playlist.length - 1) {
-          index = 0
+        if (this.playlist.length === 1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex + 1
+          if (index === this.playlist.length) {
+            index = 0
+          }
+          this.setCurrentIndex(index)
+          if (!this.playing) {
+            this.togglePlaying()
+          }
         }
-        this.setCurrentIndex(index)
-        if (!this.playing) {
-          this.togglePlaying(true)
-        }
-        this.songReady = false
       },
       prev() {
         if (!this.songReady) {
           return
         }
-        let index = this.currentIndex - 1
-        if (index === -1) {
-          index = this.playlist.length - 1
+        if (this.playlist.length === 1) {
+          this.loop()
+        } else {
+          let index = this.currentIndex - 1
+          if (index === -1) {
+            index = this.playlist.length - 1
+          }
+          this.setCurrentIndex(index)
+          if (!this.playing) {
+            this.togglePlaying(true)
+          }
         }
-        this.setCurrentIndex(index)
-        if (!this.playing) {
-          this.togglePlaying(true)
-        }
-        this.songReady = false
       },
       ready() {
         setTimeout(() => {
@@ -268,7 +274,7 @@
         if (this.mode === playMode.loop) {
           this.loop()
         } else {
-          this.$_next()
+          this.next()
         }
       },
       loop() {
@@ -277,20 +283,6 @@
         this.setPlayingState(true)
         if (this.currentLyric) {
           this.currentLyric.seek(0)
-        }
-      },
-      $_next() {
-        if (!this.songReady) {
-          return
-        }
-        if (this.playlist.length === 1) {
-          this.loop()
-        } else {
-          let index = this.currentIndex++
-          if (index === this.playlist.length) {
-            index = 0
-          }
-          this.setCurrentIndex(index)
         }
       },
       updateTime(e) {

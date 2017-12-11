@@ -7,23 +7,42 @@
     bottom 0
     width 100%
     z-index 998
-  .toast-content
+  .toast-wrapper
     position absolute
     top 50%
     left 50%
     transform translate(-50%, -50%)
     z-index 1000
-    width 120px
-    height 40px
-    border-radius 10px
-    background black
+    .toast-content
+      width 120px
+      height 40px
+      border-radius 10px
+      background black
+      opacity 0.5
+      &.fade-enter-active
+        animation scaleIn 0.3s
+      &.fade-enter
+        scale 0
+      &.fade-leave-active
+        animation fadeOut 0.3s
+      &.fade-leave-to
+        opacity 0
+      .text
+        text-align center
+        color $color-theme-text
+        line-height 40px
+        font-size $font-size-medium-x
+
+@keyframes scaleIn
+  0%
+    transform scale(0)
+  50%
+    transform scale(1.1)
+  100%
+    transform scale(1)
+
+@keyframes fadeOut
+  0%
     opacity 0.5
-    &.fade-enter-active, &.fade-leave-active
-      transition all 0.3s
-    &.fade-enter, &.fade-leave-to
-      opacity 0
-    .text
-      text-align center
-      color $color-theme-text
-      line-height 40px
-      font-size $font-size-medium-x
+  100%
+    opacity 0

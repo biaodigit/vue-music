@@ -1,11 +1,13 @@
 <template>
   <div class="toast">
     <div class="mask" v-show="showFlag"  @click.stop @touchmove.stop.prevent></div>
-    <transition name="fade">
-      <div class="toast-content" v-show="showFlag">
-        <p class="text">{{text}}</p>
-      </div>
-    </transition>
+    <div class="toast-wrapper">
+      <transition name="fade">
+        <div class="toast-content" v-show="showFlag">
+          <p class="text">{{text}}</p>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
