@@ -11,13 +11,65 @@
     transition all 0.3s
   &.slide-enter, &.slide-leave-to
     transform translate3d(100%, 0, 0)
-  .back
+  .header
+    position relative
+    height 42px
+    background $color-theme
+    .back
+      position absolute
+      top 0
+      left 6px
+      z-index 50
+      .icon-back
+        display block
+        padding 10px
+        font-size $font-size-large-x
+        color $color-theme-text
+    .title
+      line-height 40px
+      text-align center
+      color $color-theme-text
+      font-size $font-size-large
+  .switches-wrapper
+    margin 10px 0 30px 0
+  .random-wrapper
+    box-sizing border-box
+    width 135px
+    padding 7px 0
+    margin 0 auto
+    text-align center
+    border 1px solid $color-theme
+    color $color-theme
+    border-radius 100px
+    font-size 0
+    .icon-play
+      display inline-block
+      vertical-align middle
+      margin-right 6px
+      font-size $font-size-medium-x
+    .random
+      display inline-block
+      vertical-align middle
+      font-size $font-size-small
+  .list-wrapper
     position absolute
-    top 0
-    left 6px
-    z-index 50
-    .icon-back
-      display block
-      padding 10px
-      font-size $font-size-large-x
-      color $color-theme
+    top 150px
+    bottom 0
+    width 100%
+    .scroll
+      height 100%
+      overflow hidden
+      .list
+        padding 20px 30px
+        .item
+          display flex
+          flex-direction column
+          justify-content center
+          margin-bottom 20px
+          .song
+            margin-bottom 5px
+            font-size $font-size-medium-x
+            color $color-dialog-background
+          .name
+            font-size $font-size-medium
+            color $color-text-d

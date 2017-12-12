@@ -6,6 +6,9 @@ const SEARCH_MAX_LEN = 20
 const FAVORITE_KEY = '__favorite__'
 const FAVORITE_MAX_LEN = 300
 
+const HISTORY_KEY = '__history__'
+const HISTORY_MAX_LEN = 200
+
 function insertArray(arr, val, compare, maxLen) {
   const index = arr.findIndex(compare)
   if (index === 0) {
@@ -75,4 +78,17 @@ export function deleteFavoriteSong(song) {
 
 export function getFavorites() {
   return storage.get(FAVORITE_KEY, [])
+}
+
+export function setPlayHistory(song) {
+  let history = storage.get(HISTORY_KEY, [])
+  insertArray(history, song, (item) => {
+    return song.id === item.id
+  }, HISTORY_MAX_LEN)
+  storage.set(HISTORY_KEY, history)
+  return history
+}
+
+export function getPlayHistory() {
+  return storage.get(HISTORY_KEY, [])
 }

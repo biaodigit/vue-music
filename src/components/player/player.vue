@@ -115,7 +115,7 @@
   import ProgressBar from 'base/progress-bar/progress-bar'
   import PlayList from 'components/play-list/play-list'
   import Toast from 'base/toast/toast'
-  import {mapGetters, mapMutations} from 'vuex'
+  import {mapGetters, mapMutations, mapActions} from 'vuex'
   import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
@@ -255,6 +255,7 @@
         setTimeout(() => {
           this.songReady = true
         }, 500)
+        this.setHistory(this.currentSong)
         this.canPlayLyric = true
         if (this.currentLyric && this.hasLyric) {
           this.currentLyric.seek(this.currentTime * 1000)
@@ -416,7 +417,10 @@
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE'
-      })
+      }),
+      ...mapActions([
+        'setHistory'
+      ])
     },
     watch: {
       currentSong(newSong, oldSong) {
