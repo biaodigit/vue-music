@@ -25,8 +25,8 @@
              ref="middle">
           <div class="middle-l" ref="middleL">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd" :class="cdPlayCls">
-                <img class="cd-img" :src="currentSong.image">
+              <div class="cd"  ref="imageWrapper">
+                <img class="cd-img" :class="cdPlayCls" :src="currentSong.image" ref="image">
               </div>
             </div>
             <div class="playing-lyric-wrapper">
@@ -398,6 +398,21 @@
       showPlaylist() {
         this.$refs.playList.show()
       },
+      // 兼容微信浏览器暂停播放CD继续转动问题
+      syncWrapperTransform(wrapper, inner) {
+        if (!this.$refs[wrapper]) {
+          return
+        }
+        let imageWrapper = this.$refs[wrapper]
+        let image = this.$refs[inner]
+        let wTransform = getComputedStyle(imageWrapper)[transform]
+        let iTransform = getComputedStyle(image)[transform]
+        console.log(wTransform)
+        console.log(iTransform)
+        console.log(imageWrapper.style[transform])
+        imageWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
+        console.log(imageWrapper.style[transform])
+      },
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE'
@@ -422,14 +437,21 @@
         this.$refs.audio.play()
         this.getLyric()
       },
-      playing(newPlay) {
+      playing(newPlaying) {
         if (!this.songReady) {
           return
         }
         let audio = this.$refs.audio
         this.$nextTick(() => {
-          newPlay ? audio.play() : audio.pause()
+          newPlaying ? audio.play() : audio.pause()
         })
+        if (!newPlaying) {
+          if (this.fullScreen) {
+            this.syncWrapperTransform('imageWrapper', 'image')
+          } else {
+            this.syncWrapperTransform('miniWrapper', 'miniImage')
+          }
+        }
       }
     },
     computed: {
@@ -440,7 +462,7 @@
         return this.playing ? 'icon-pause-mini' : 'icon-play-mini'
       },
       cdPlayCls() {
-        return this.playing ? 'play' : 'play pause'
+        return this.playing ? 'play' : ''
       },
       disableCls() {
         return this.songReady ? '' : 'disable'

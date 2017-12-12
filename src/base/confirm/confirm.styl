@@ -11,6 +11,14 @@
     animation fadeIn 0.3s
     .confirm-content
       animation zoomIn 0.3s
+  &.fade-leave-active
+    animation fadeIn 0.3s reverse
+    .confirm-content
+      animation zoomIn 0.3s reverse
+  &.fade-enter,&.fade-leave-to
+    opacity 0
+    .confirm-content
+      transform scale(0)
   .confirm-wrapper
     position absolute
     top 50%

@@ -20,7 +20,7 @@
         type: Number,
         default: 1000
       },
-      animatePos: {
+      transitionPos: {
         type: String,
         default: 'middle'
       },
@@ -33,7 +33,7 @@
     },
     computed: {
       currentTransition() {
-        if (this.animatePos === 'middle') {
+        if (this.transitionPos === 'middle') {
           return 'vud-toast-middle'
         }
       }
