@@ -33,6 +33,14 @@
         type: Boolean,
         default: false
       },
+      scrollX: {
+        type: Boolean,
+        default: false
+      },
+      scrollY: {
+        type: Boolean,
+        default: true
+      },
       beforeScroll: {
         type: Boolean,
         default: false
@@ -58,6 +66,8 @@
         this.scroll = new BScroll(this.$refs.wrapper, {
           probeType: this.probeType,
           click: this.click,
+          scrollX: this.scrollX,
+          scrollY: this.scrollY,
           threshold: 100
         })
 
