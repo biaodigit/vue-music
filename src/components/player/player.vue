@@ -408,8 +408,6 @@
         let image = this.$refs[inner]
         let wTransform = getComputedStyle(imageWrapper)[transform]
         let iTransform = getComputedStyle(image)[transform]
-        console.log(wTransform)
-        console.log(iTransform)
         console.log(imageWrapper.style[transform])
         imageWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
         console.log(imageWrapper.style[transform])
