@@ -16,15 +16,20 @@
         <div class="button"></div>
       </div>
     </div>
+    <singer-list @select="selectSinger" :singers="singers"></singer-list>
     <router-view></router-view>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
+  import SingerList from 'components/singer-list/singer-list'
   import {tabsData} from 'common/js/config'
   import {prefixStyle} from 'common/js/dom'
-  import {mapMutations, mapGetters} from 'vuex'
+  import {getSingerList} from 'api/singer'
+  import Singer from 'common/js/singer'
+  import {ERR_OK} from 'api/config'
+  import {mapMutations} from 'vuex'
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
@@ -32,19 +37,19 @@
   const MIN_LEFT_MOVE = -555
   const LEFT = 44
   const RECT_LEFT = 194
+  const DEFAULT_TYPE = 'all'
 
   export default {
     data() {
       return {
         prevIndex: null,
         currentIndex: 0,
-        scrollX: 0
+        scrollX: 0,
+        singers: []
       }
     },
     created() {
-      this.$router.push({
-        path: `/singer/${this.singerType}`
-      })
+      this._getSingerList(DEFAULT_TYPE)
       this.touch = {}
       this.data = tabsData.data
     },
@@ -95,11 +100,31 @@
         if (item === '热门') {
           item = 'all'
         }
-        console.log(item)
-        this.$router.push({
-          path: `/singer/${item}`
+        this._getSingerList(item)
+      },
+      _getSingerList(type) {
+        getSingerList(type).then((res) => {
+          if (res.code === ERR_OK) {
+            this.singers = this._formatSingerList(res.data.list)
+            console.log(this.singers)
+          }
         })
-        this.setSingerType(item)
+      },
+      _formatSingerList(list) {
+        let ret = []
+        list.forEach((singer) => {
+          ret.push(new Singer({
+            id: singer.Fsinger_mid,
+            name: singer.Fsinger_name
+          }))
+        })
+        return ret
+      },
+      selectSinger(item, index) {
+        this.$router.push({
+          path: `/singer/${item.id}`
+        })
+        this.setSinger(item)
       },
       /**
        * 原生JS滑动实现版
@@ -115,18 +140,11 @@
         this.$refs.tabWrapper.style[transform] = `translate3d(${width}px,0,0)`
       },
       ...mapMutations({
-        setSingerType: 'SET_SINGER_TYPE'
+        setSinger: 'SET_SINGER'
       })
     },
-    activated() {
-      this.$router.push({
-        path: `/singer/${this.singerType}`
-      })
-    },
-    computed: {
-      ...mapGetters([
-        'singerType'
-      ])
+    components: {
+      SingerList
     }
   }
 </script>

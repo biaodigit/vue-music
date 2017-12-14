@@ -9,7 +9,6 @@ const Rank = () => import('components/rank/rank')
 const Search = () => import('components/search/search')
 const UserCenter = () => import('components/user-center/user-center')
 const SingerDetail = () => import('components/singer-detail/singer-detail')
-const SingerList = () => import('components/singer-list/singer-list')
 const Disc = () => import('components/disc/disc')
 const TopList = () => import('components/top-list/top-list')
 
@@ -34,17 +33,10 @@ export default new Router({
       path: '/singer',
       name: 'singer',
       component: Singer,
-      // redirect: '/singer/all',
       children: [
         {
-          path: ':type',
-          component: SingerList,
-          children: [
-            {
-              path: ':id',
-              component: SingerDetail
-            }
-          ]
+          path: ':id',
+          component: SingerDetail
         }
       ]
     },
