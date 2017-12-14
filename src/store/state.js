@@ -2,6 +2,7 @@ import {playMode} from 'common/js/config'
 import {getSearchHistory, getFavorites, getPlayHistory} from 'common/js/storage'
 
 const state = {
+  singerType: 'all',
   singer: {},
   playing: false,
   playlist: [],

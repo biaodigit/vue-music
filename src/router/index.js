@@ -4,12 +4,12 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const Recommend = () => import('components/recommend/recommend')
-const Singer = () => import('components/dsinger/dsinger')
+const Singer = () => import('components/singer/singer')
 const Rank = () => import('components/rank/rank')
 const Search = () => import('components/search/search')
 const UserCenter = () => import('components/user-center/user-center')
 const SingerDetail = () => import('components/singer-detail/singer-detail')
-const SingerType = () => import('components/singer-type/singer-type')
+const SingerList = () => import('components/singer-list/singer-list')
 const Disc = () => import('components/disc/disc')
 const TopList = () => import('components/top-list/top-list')
 
@@ -21,6 +21,7 @@ export default new Router({
     },
     {
       path: '/recommend',
+      name: 'recommend',
       component: Recommend,
       children: [
         {
@@ -31,11 +32,13 @@ export default new Router({
     },
     {
       path: '/singer',
+      name: 'singer',
       component: Singer,
+      // redirect: '/singer/all',
       children: [
         {
           path: ':type',
-          component: SingerType,
+          component: SingerList,
           children: [
             {
               path: ':id',
@@ -47,6 +50,7 @@ export default new Router({
     },
     {
       path: '/rank',
+      name: 'rank',
       component: Rank,
       children: [
         {
@@ -57,6 +61,7 @@ export default new Router({
     },
     {
       path: '/search',
+      name: 'search',
       component: Search,
       children: [
         {
@@ -67,6 +72,7 @@ export default new Router({
     },
     {
       path: '/user',
+      name: 'user',
       component: UserCenter
     }
   ]

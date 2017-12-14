@@ -6,3 +6,46 @@
   bottom 0
   width 100%
   background $color-background
+  .navigator
+    position absolute
+    top 0
+    left 0
+    height 54px
+    width 100%
+    box-shadow 0 3px 3px rgba(0,0,0,0.1)
+    border-1px-bottom($border-1px)
+    .navigator-wrapper
+      position relative
+      height 54px
+      font-size 0
+      .icon
+        position absolute
+        top 50%
+        width 44px
+        transform translateY(-50%)
+        text-align center
+        .icon-search
+          font-size $font-size-large-x
+      .tab
+        position absolute
+        left 44px
+        right 38px
+        white-space nowrap
+        overflow hidden
+        .tab-wrapper
+          height 100%
+          .tab-item
+            display inline-block
+            box-sizing border-box
+            width 50px
+            line-height 54px
+            padding 0 10px
+            text-align center
+            font-size $font-size-medium-x
+            &.active
+              color $color-theme
+              font-size $font-size-large
+      .button
+        display inline-block
+        vertical-align middle
+        width 38px

@@ -1,3 +1,5 @@
+export const singerType = state => state.singerType
+
 export const singer = state => state.singer
 
 export const playing = state => state.playing

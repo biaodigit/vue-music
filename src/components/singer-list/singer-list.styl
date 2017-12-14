@@ -1,0 +1,24 @@
+@import "~common/stylus/common"
+
+.singer-type
+  position fixed
+  top 142px
+  bottom 0
+  width 100%
+  overflow hidden
+  background $color-highlight-background
+  .list
+    padding-bottom 30px
+    .item
+      display flex
+      align-items center
+      padding 20px 0 0 30px
+      .avatar
+        width 50px
+        height 50px
+        border-radius 50%
+      .name
+        margin-left 20px
+        padding-right 10px
+        font-size $font-size-medium-x
+        no-wrap()

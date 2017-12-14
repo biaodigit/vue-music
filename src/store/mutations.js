@@ -1,6 +1,9 @@
 import * as types from './mutation-types'
 
 const mutations = {
+  [types.SET_SINGER_TYPE](state, type) {
+    state.singerType = type
+  },
   [types.SET_SINGER](state, singer) {
     state.singer = singer
   },
