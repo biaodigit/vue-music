@@ -13,7 +13,20 @@
             </li>
           </ul>
         </div>
-        <div class="button"></div>
+        <div @click="open" class="button">
+          <div class="icon"></div>
+        </div>
+        <transition name="fade">
+          <div class="quick-entry-wrapper" @click="close" v-show="showEntry">
+            <div class="quick-entry">
+              <ul class="item-list">
+                <li @click.stop="quickSelect(item,index)" class="item" v-for="(item,index) in data">
+                  <span class="text" :class="{'active': currentIndex === index}">{{item}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </transition>
       </div>
     </div>
     <singer-list @select="selectSinger" :singers="singers"></singer-list>
@@ -34,10 +47,11 @@
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
 
-  const MIN_LEFT_MOVE = -555
+  const MIN_LEFT_MOVE = -1050
   const LEFT = 44
   const RECT_LEFT = 194
   const DEFAULT_TYPE = 'all'
+  const TIME = 300
 
   export default {
     data() {
@@ -45,7 +59,8 @@
         prevIndex: null,
         currentIndex: 0,
         scrollX: 0,
-        singers: []
+        singers: [],
+        showEntry: false
       }
     },
     created() {
@@ -73,36 +88,46 @@
           scrollX: true,
           scrollY: false
         })
-        this.touch.move = 0
-        this.scroll.on('scroll', (pos) => {
-        })
       },
       selectItem(item, index) {
         this.touch.initiated = true
-        this.prevIndex = this.currentIndex
-        this.currentIndex = index
         let children = this.$refs.tabWrapper.children[index]
         let rect = this.$refs.tabWrapper.getBoundingClientRect()
         let move
-        let time = 300
         if (rect.left <= 44 && this.currentIndex < 3) {
           move = 0
         } else {
           move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
         }
         if (rect.right >= 337 && this.currentIndex > 24) {
-          move = -1055
+          move = MIN_LEFT_MOVE
         }
-        this.touch.move = move
+        this._wrapperMove(item, index, move)
+      },
+      open() {
+        this.showEntry = !this.showEntry
+      },
+      close() {
+        this.showEntry = false
+      },
+      quickSelect(item, index) {
+        let rect = this.$refs.tabWrapper.getBoundingClientRect()
+        let childRect = this.$refs.tabWrapper.children[index].getBoundingClientRect()
+        let left = RECT_LEFT - childRect.left
+        let move = Math.min(0, Math.max(MIN_LEFT_MOVE, rect.left - LEFT + left))
+        this._wrapperMove(item, index, move)
+      },
+      _wrapperMove(item, index, move) {
         this.$refs.tabWrapper.style[transform] = `translate3d(${move}px,0,0)`
-        this.$refs.tabWrapper.style[transitionDuration] = `${time}ms`
+        this.$refs.tabWrapper.style[transitionDuration] = `${TIME}ms`
         this.scroll.x = move
-        if (item === '热门') {
-          item = 'all'
-        }
+        this.currentIndex = index
         this._getSingerList(item)
       },
       _getSingerList(type) {
+        if (type === '热门') {
+          type = 'all'
+        }
         getSingerList(type).then((res) => {
           if (res.code === ERR_OK) {
             this.singers = this._formatSingerList(res.data.list)
@@ -138,6 +163,7 @@
         this.touch.moveX = e.touches[0].pageX - this.touch.startX
         let width = Math.min(0, Math.max(MIN_LEFT_MOVE, this.touch.moveX + this.touch.left))
         this.$refs.tabWrapper.style[transform] = `translate3d(${width}px,0,0)`
+        this.$refs.tabWrapper.style.left = `${width}px`
       },
       ...mapMutations({
         setSinger: 'SET_SINGER'

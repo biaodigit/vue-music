@@ -25,7 +25,7 @@
              ref="middle">
           <div class="middle-l" ref="middleL">
             <div class="cd-wrapper" ref="cdWrapper">
-              <div class="cd"  ref="imageWrapper">
+              <div class="cd" ref="imageWrapper">
                 <img class="cd-img" :class="cdPlayCls" :src="currentSong.image" ref="image">
               </div>
             </div>
@@ -56,7 +56,7 @@
             <div class="progress-bar-wrapper">
               <progress-bar
                 @percentChanging="changingPercent"
-                @percentChange="changePercent" :percent="percent"></progress-bar>
+                @percentChange="changePercent" :percent="percent" ref="progressBar"></progress-bar>
             </div>
             <span class="time time-r">{{format(currentSong.duration)}}</span>
           </div>
@@ -453,6 +453,13 @@
           } else {
             this.syncWrapperTransform('miniWrapper', 'miniImage')
           }
+        }
+      },
+      fullScreen(val) {
+        if (val) {
+          this.$nextTick(() => {
+            this.$refs.progressBar.setProgressOffset(this.percent)
+          })
         }
       }
     },
