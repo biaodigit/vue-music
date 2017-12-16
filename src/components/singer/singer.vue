@@ -3,7 +3,7 @@
     <div class="navigator border-1px-bottom">
       <div class="navigator-wrapper">
         <div class="icon">
-          <i class="icon-search"></i>
+          <i class="icon-mine"></i>
         </div>
         <div class="tab" ref="tab">
           <ul class="tab-wrapper" ref="tabWrapper">
@@ -49,6 +49,7 @@
 
   const MIN_LEFT_MOVE = -1050
   const LEFT = 44
+  const RIGHT = 337
   const RECT_LEFT = 194
   const DEFAULT_TYPE = 'all'
   const TIME = 300
@@ -88,18 +89,22 @@
           scrollX: true,
           scrollY: false
         })
+//        this.scroll.on('scroll', (pos) => {
+//        })
       },
       selectItem(item, index) {
         this.touch.initiated = true
+        this.prevIndex = this.currentIndex
+        this.currentIndex = index
         let children = this.$refs.tabWrapper.children[index]
         let rect = this.$refs.tabWrapper.getBoundingClientRect()
         let move
-        if (rect.left <= 44 && this.currentIndex < 3) {
+        if (rect.left <= LEFT && this.currentIndex < 3) {
           move = 0
         } else {
           move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
         }
-        if (rect.right >= 337 && this.currentIndex > 24) {
+        if (rect.right >= RIGHT && this.currentIndex > 24) {
           move = MIN_LEFT_MOVE
         }
         this._wrapperMove(item, index, move)
