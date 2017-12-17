@@ -84,6 +84,7 @@
           list: this.songs,
           index: index
         })
+        console.log(this.songs)
       },
       random() {
         this.randomPlay({

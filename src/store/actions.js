@@ -67,6 +67,7 @@ export function insertSong({commit, state}, song) {
   } else {
     commit(types.SET_PLAYLIST, playlist)
   }
+  console.log(playlist)
   commit(types.SET_SEQUENCE_LIST, sequenceList)
   commit(types.SET_CURRENT_INDEX, currentIndex)
   commit(types.SET_FULL_SCREEN, true)

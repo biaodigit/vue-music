@@ -49,7 +49,6 @@
 
   const MIN_LEFT_MOVE = -1050
   const LEFT = 44
-  const RIGHT = 337
   const RECT_LEFT = 194
   const DEFAULT_TYPE = 'all'
   const TIME = 300
@@ -89,8 +88,6 @@
           scrollX: true,
           scrollY: false
         })
-//        this.scroll.on('scroll', (pos) => {
-//        })
       },
       selectItem(item, index) {
         this.touch.initiated = true
@@ -98,13 +95,14 @@
         this.currentIndex = index
         let children = this.$refs.tabWrapper.children[index]
         let rect = this.$refs.tabWrapper.getBoundingClientRect()
+        console.log(rect)
         let move
         if (rect.left <= LEFT && this.currentIndex < 3) {
           move = 0
         } else {
           move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
         }
-        if (rect.right >= RIGHT && this.currentIndex > 24) {
+        if (this.currentIndex > 24) {
           move = MIN_LEFT_MOVE
         }
         this._wrapperMove(item, index, move)
@@ -136,7 +134,6 @@
         getSingerList(type).then((res) => {
           if (res.code === ERR_OK) {
             this.singers = this._formatSingerList(res.data.list)
-            console.log(this.singers)
           }
         })
       },

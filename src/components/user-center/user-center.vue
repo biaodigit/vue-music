@@ -42,7 +42,6 @@
   import SongList from 'base/song-list/song-list'
   import {mapGetters, mapActions} from 'vuex'
   import {playlistMixin} from 'common/js/mixin'
-  import Song from 'common/js/song'
 
   export default {
     mixins: [playlistMixin],
@@ -76,13 +75,12 @@
         }
       },
       selectItem(item) {
-        this.insertSong(new Song(item))
+        this.insertSong(item)
+        console.log(item)
       },
       random() {
         let list = this.currentIndex === 0 ? this.favoriteList : this.playHistory
-        list = list.map((song) => {
-          return new Song(song)
-        })
+        console.log(list)
         this.randomPlay({list})
       },
       handlePlaylist(playlist) {
@@ -93,7 +91,8 @@
       },
       ...mapActions([
         'insertSong',
-        'randomPlay'
+        'randomPlay',
+        'selectPlay'
       ])
     },
     computed: {

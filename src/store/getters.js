@@ -1,3 +1,5 @@
+import Song from 'common/js/song'
+
 export const singerType = state => state.singerType
 
 export const singer = state => state.singer
@@ -24,6 +26,14 @@ export const topList = state => state.topList
 
 export const searchHistory = state => state.searchHistory
 
-export const favoriteList = state => state.favoriteList
+export const playHistory = (state) => {
+  return state.playHistory.map((song) => {
+    return new Song(song)
+  })
+}
 
-export const playHistory = state => state.playHistory
+export const favoriteList = (state) => {
+  return state.favoriteList.map((song) => {
+    return new Song(song)
+  })
+}

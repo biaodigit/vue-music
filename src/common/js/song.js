@@ -6,7 +6,7 @@ import {Base64} from 'js-base64'
 let urlMap = {}
 
 export default class Song {
-  constructor({id, mid, singer, name, album, duration, image, url}) {
+  constructor({id, mid, singer, name, album, duration, image}) {
     this.id = id
     this.mid = mid
     this.singer = singer
@@ -18,12 +18,7 @@ export default class Song {
     if (urlMap[this.id]) {
       this.url = urlMap[this.id]
     } else {
-      if (url) {
-        this.url = url
-        urlMap[this.id] = url
-      } else {
-        this._getUrl()
-      }
+      this._getUrl()
     }
   }
 
