@@ -56,6 +56,7 @@ export const playerMixin = {
         this.deleteFavorite(song)
         this.text = '取消收藏成功'
       } else {
+        console.log(song)
         this.addFavorite(song)
         this.text = '收藏成功'
       }

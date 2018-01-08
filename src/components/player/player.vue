@@ -422,9 +422,6 @@
     },
     watch: {
       currentSong(newSong, oldSong) {
-        console.log(newSong)
-        console.log(newSong.name)
-        console.log(newSong.url)
         // 切换到随机播放模式防止歌曲暂停仍然播放
         if (!newSong.id || !newSong.url || newSong.id === oldSong.id) {
           return

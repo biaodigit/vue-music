@@ -80,7 +80,7 @@
       },
       random() {
         let list = this.currentIndex === 0 ? this.favoriteList : this.playHistory
-        console.log(list)
+
         this.randomPlay({list})
       },
       handlePlaylist(playlist) {
