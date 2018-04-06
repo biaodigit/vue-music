@@ -52,6 +52,8 @@
   const RECT_LEFT = 194
   const DEFAULT_TYPE = 'all'
   const TIME = 300
+  const charCodeC = 67
+  const distance = -50
 
   export default {
     data() {
@@ -95,12 +97,17 @@
         this.currentIndex = index
         let children = this.$refs.tabWrapper.children[index]
         let rect = this.$refs.tabWrapper.getBoundingClientRect()
-        console.log(rect)
         let move
+        console.log(item)
+        console.log(children.getBoundingClientRect().left)
+          // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
         if (rect.left <= LEFT && this.currentIndex < 3) {
           move = 0
         } else {
-          move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
+          // 否则移动到制定地点
+          // move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
+          move = (item.charCodeAt() - charCodeC) * distance
+          console.log(move)
         }
         if (this.currentIndex > 24) {
           move = MIN_LEFT_MOVE
