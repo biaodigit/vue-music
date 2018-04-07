@@ -47,7 +47,7 @@
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
 
-  const MIN_LEFT_MOVE = -1050
+  const MAX_LEFT_MOVE = -1050
   const LEFT = 44
   const RECT_LEFT = 194
   const DEFAULT_TYPE = 'all'
@@ -100,17 +100,17 @@
         let move
         console.log(item)
         console.log(children.getBoundingClientRect().left)
-          // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
+        // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
         if (rect.left <= LEFT && this.currentIndex < 3) {
           move = 0
-        } else {
-          // 否则移动到制定地点
+        } else if (this.currentIndex >= 3 && this.currentIndex <= 24) {
+          // 当点击的位置索引是D - W,计算字符编码测算距离移动到制定地点
           // move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
           move = (item.charCodeAt() - charCodeC) * distance
           console.log(move)
-        }
-        if (this.currentIndex > 24) {
-          move = MIN_LEFT_MOVE
+        } else {
+          // 当点击X、Y、Z时直接移动最大距离
+          move = MAX_LEFT_MOVE
         }
         this._wrapperMove(item, index, move)
       },
@@ -124,7 +124,7 @@
         let rect = this.$refs.tabWrapper.getBoundingClientRect()
         let childRect = this.$refs.tabWrapper.children[index].getBoundingClientRect()
         let left = RECT_LEFT - childRect.left
-        let move = Math.min(0, Math.max(MIN_LEFT_MOVE, rect.left - LEFT + left))
+        let move = Math.min(0, Math.max(MAX_LEFT_MOVE, rect.left - LEFT + left))
         this._wrapperMove(item, index, move)
       },
       _wrapperMove(item, index, move) {
@@ -170,7 +170,7 @@
       },
       tabTouchMove(e) {
         this.touch.moveX = e.touches[0].pageX - this.touch.startX
-        let width = Math.min(0, Math.max(MIN_LEFT_MOVE, this.touch.moveX + this.touch.left))
+        let width = Math.min(0, Math.max(MAX_LEFT_MOVE, this.touch.moveX + this.touch.left))
         this.$refs.tabWrapper.style[transform] = `translate3d(${width}px,0,0)`
         this.$refs.tabWrapper.style.left = `${width}px`
       },
