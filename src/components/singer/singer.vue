@@ -48,12 +48,14 @@
   const transitionDuration = prefixStyle('transitionDuration')
 
   const MAX_LEFT_MOVE = -1050
-  const LEFT = 44
-  const RECT_LEFT = 194
   const DEFAULT_TYPE = 'all'
   const TIME = 300
   const charCodeC = 67
+  const indexOfC = 3
+  const indexOfW = 24
   const distance = -50
+  const HOT = '热门'
+  // const LEFT = 44
 
   export default {
     data() {
@@ -96,14 +98,14 @@
         this.prevIndex = this.currentIndex
         this.currentIndex = index
         let children = this.$refs.tabWrapper.children[index]
-        let rect = this.$refs.tabWrapper.getBoundingClientRect()
+        // let rect = this.$refs.tabWrapper.getBoundingClientRect()
         let move
         console.log(item)
         console.log(children.getBoundingClientRect().left)
         // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
-        if (rect.left <= LEFT && this.currentIndex < 3) {
+        if (this.currentIndex <= indexOfC) {
           move = 0
-        } else if (this.currentIndex >= 3 && this.currentIndex <= 24) {
+        } else if (this.currentIndex > indexOfC && this.currentIndex <= indexOfW) {
           // 当点击的位置索引是D - W,计算字符编码测算距离移动到制定地点
           // move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
           move = (item.charCodeAt() - charCodeC) * distance
@@ -121,10 +123,12 @@
         this.showEntry = false
       },
       quickSelect(item, index) {
-        let rect = this.$refs.tabWrapper.getBoundingClientRect()
-        let childRect = this.$refs.tabWrapper.children[index].getBoundingClientRect()
-        let left = RECT_LEFT - childRect.left
-        let move = Math.min(0, Math.max(MAX_LEFT_MOVE, rect.left - LEFT + left))
+        let move
+        if (item === HOT) {
+          move = 0
+        } else {
+          move = Math.min(0, Math.max(MAX_LEFT_MOVE, (item.charCodeAt() - charCodeC) * distance))
+        }
         this._wrapperMove(item, index, move)
       },
       _wrapperMove(item, index, move) {
@@ -135,7 +139,7 @@
         this._getSingerList(item)
       },
       _getSingerList(type) {
-        if (type === '热门') {
+        if (type === HOT) {
           type = 'all'
         }
         getSingerList(type).then((res) => {
@@ -164,16 +168,16 @@
        * 原生JS滑动实现版
        * @param e
        */
-      tabTouchStart(e) {
-        this.touch.startX = e.touches[0].pageX
-        this.touch.left = this.$refs.tabWrapper.getBoundingClientRect().left - LEFT
-      },
-      tabTouchMove(e) {
-        this.touch.moveX = e.touches[0].pageX - this.touch.startX
-        let width = Math.min(0, Math.max(MAX_LEFT_MOVE, this.touch.moveX + this.touch.left))
-        this.$refs.tabWrapper.style[transform] = `translate3d(${width}px,0,0)`
-        this.$refs.tabWrapper.style.left = `${width}px`
-      },
+      // tabTouchStart(e) {
+      //   this.touch.startX = e.touches[0].pageX
+      //   this.touch.left = this.$refs.tabWrapper.getBoundingClientRect().left - LEFT
+      // },
+      // tabTouchMove(e) {
+      //   this.touch.moveX = e.touches[0].pageX - this.touch.startX
+      //   let width = Math.min(0, Math.max(MAX_LEFT_MOVE, this.touch.moveX + this.touch.left))
+      //   this.$refs.tabWrapper.style[transform] = `translate3d(${width}px,0,0)`
+      //   this.$refs.tabWrapper.style.left = `${width}px`
+      // },
       ...mapMutations({
         setSinger: 'SET_SINGER'
       })
