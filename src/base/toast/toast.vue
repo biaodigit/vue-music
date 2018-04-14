@@ -52,7 +52,6 @@
       },
       value(val) {
         this.showFlag = val
-        console.log(val)
       }
     },
     beforeDestroy() {

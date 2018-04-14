@@ -21,6 +21,10 @@
         default: []
       }
     },
+    mounted() {
+      let list = document.querySelectorAll('.item')
+      console.log(list)
+    },
     methods: {
       handlePlaylist(playlist) {
         let bottom = playlist.length > 0 ? '60px' : 0

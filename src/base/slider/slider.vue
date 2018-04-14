@@ -44,23 +44,6 @@
           this._play()
         }
       }, 20)
-
-      window.addEventListener('resize', () => {
-        if (!this.slider || !this.slider.enabled) {
-          return
-        }
-        clearTimeout(this.resizeTimer)
-        this.resizeTimer = setTimeout(() => {
-          if (this.slider.isInTransition) {
-            this._changePageIndex()
-          } else {
-            if (this.autoPlay) {
-              this._play()
-            }
-          }
-          this.refreshSlider()
-        }, 60)
-      })
     },
     activated() {
       this.slider.enable()

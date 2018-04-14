@@ -7,7 +7,8 @@ export const playMode = {
 export const tabsData = {
   data: tabs()
 }
-export function tabs() {
+
+function tabs() {
   let ret = []
   for (let i = 0; i < 26; i++) {
     ret.push(String.fromCharCode(65 + i))

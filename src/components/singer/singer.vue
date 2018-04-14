@@ -97,19 +97,13 @@
         this.touch.initiated = true
         this.prevIndex = this.currentIndex
         this.currentIndex = index
-        let children = this.$refs.tabWrapper.children[index]
-        // let rect = this.$refs.tabWrapper.getBoundingClientRect()
         let move
-        console.log(item)
-        console.log(children.getBoundingClientRect().left)
         // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
         if (this.currentIndex <= indexOfC) {
           move = 0
         } else if (this.currentIndex > indexOfC && this.currentIndex <= indexOfW) {
           // 当点击的位置索引是D - W,计算字符编码测算距离移动到制定地点
-          // move = rect.left - LEFT + RECT_LEFT - children.getBoundingClientRect().left
           move = (item.charCodeAt() - charCodeC) * distance
-          console.log(move)
         } else {
           // 当点击X、Y、Z时直接移动最大距离
           move = MAX_LEFT_MOVE

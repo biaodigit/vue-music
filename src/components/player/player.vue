@@ -1,10 +1,6 @@
 <template>
   <div class="player" v-show="playlist.length">
-    <transition name="normal"
-                @enter="enter"
-                @after-enter="afterEnter"
-                @leave="leave"
-                @after-leave="afterLeave">
+    <transition name="normal">
       <div class="normal-player" v-show="fullScreen">
         <div class="background">
           <img width="100%" height="100%" :src="currentSong.image">
@@ -116,7 +112,6 @@
   import PlayList from 'components/play-list/play-list'
   import Toast from 'base/toast/toast'
   import {mapGetters, mapMutations, mapActions} from 'vuex'
-  import animations from 'create-keyframe-animation'
   import {prefixStyle} from 'common/js/dom'
   import {playMode} from 'common/js/config'
   import {playerMixin} from 'common/js/mixin'
@@ -150,63 +145,6 @@
       },
       open() {
         this.setFullScreen(true)
-      },
-      enter(el, done) {
-        let {x, y, scale} = this.$_getPosAndScale()
-
-        let animation = {
-          0: {
-            transform: `translate3d(${x}px,${y}px,0) scale(${scale})`
-          },
-          60: {
-            transform: `translate3d(0,0,0) scale(1.1)`
-          },
-          100: {
-            transform: `translate3d(0,0,0) scale(1)`
-          }
-        }
-
-        animations.registerAnimation({
-          name: 'move',
-          animation,
-          presets: {
-            duration: 400,
-            easing: 'linear'
-          }
-        })
-
-        animations.runAnimation(this.$refs.cdWrapper, 'move', done)
-      },
-      afterEnter() {
-        animations.unregisterAnimation('move')
-        this.$refs.cdWrapper.style.animation = ''
-      },
-      leave(el, done) {
-        this.$refs.cdWrapper.style.transition = 'all 0.4s'
-        let {x, y, scale} = this.$_getPosAndScale()
-        this.$refs.cdWrapper.style[transform] = `translate3d(${x}px,${y}px,0) scale(${scale})`
-        const timer = setTimeout(done, 400)
-        this.$refs.cdWrapper.addEventListener('transitionend', () => {
-          clearTimeout(timer)
-          done()
-        })
-      },
-      afterLeave() {
-        this.$refs.cdWrapper.style.transition = ''
-        this.$refs.cdWrapper.style[transform] = ''
-      },
-      $_getPosAndScale() {
-        let targetWidth = 40
-        let paddingLeft = 40
-        let paddingTop = 80
-        let paddingBottom = 30
-        let width = window.innerWidth * 0.8
-        let x = -(window.innerWidth / 2 - paddingLeft)
-        let y = window.innerHeight - paddingTop - paddingBottom - width / 2
-        let scale = targetWidth / width
-        return {
-          x, y, scale
-        }
       },
       togglePlaying() {
         if (!this.songReady) {
