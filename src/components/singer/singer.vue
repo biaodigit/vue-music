@@ -55,7 +55,6 @@
   const indexOfW = 24
   const distance = -50
   const HOT = '热门'
-  // const LEFT = 44
 
   export default {
     data() {
@@ -79,6 +78,7 @@
       }, 20)
     },
     methods: {
+      // region 初始化模块
       _initTabWidth() {
         let tabs = this.$refs.tabWrapper.children
         let width = 0
@@ -92,45 +92,6 @@
           scrollX: true,
           scrollY: false
         })
-      },
-      selectItem(item, index) {
-        this.touch.initiated = true
-        this.prevIndex = this.currentIndex
-        this.currentIndex = index
-        let move
-        // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
-        if (this.currentIndex <= indexOfC) {
-          move = 0
-        } else if (this.currentIndex > indexOfC && this.currentIndex <= indexOfW) {
-          // 当点击的位置索引是D - W,计算字符编码测算距离移动到制定地点
-          move = (item.charCodeAt() - charCodeC) * distance
-        } else {
-          // 当点击X、Y、Z时直接移动最大距离
-          move = MAX_LEFT_MOVE
-        }
-        this._wrapperMove(item, index, move)
-      },
-      open() {
-        this.showEntry = !this.showEntry
-      },
-      close() {
-        this.showEntry = false
-      },
-      quickSelect(item, index) {
-        let move
-        if (item === HOT) {
-          move = 0
-        } else {
-          move = Math.min(0, Math.max(MAX_LEFT_MOVE, (item.charCodeAt() - charCodeC) * distance))
-        }
-        this._wrapperMove(item, index, move)
-      },
-      _wrapperMove(item, index, move) {
-        this.$refs.tabWrapper.style[transform] = `translate3d(${move}px,0,0)`
-        this.$refs.tabWrapper.style[transitionDuration] = `${TIME}ms`
-        this.scroll.x = move
-        this.currentIndex = index
-        this._getSingerList(item)
       },
       _getSingerList(type) {
         if (type === HOT) {
@@ -152,12 +113,64 @@
         })
         return ret
       },
+      // endregion
+
+      // region 横向滚动导航入口
+      selectItem(item, index) {
+        this.touch.initiated = true
+        this.prevIndex = this.currentIndex
+        this.currentIndex = index
+        let move
+        // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
+        if (this.currentIndex <= indexOfC) {
+          move = 0
+        } else if (this.currentIndex > indexOfC && this.currentIndex <= indexOfW) {
+          // 当点击的位置索引是D - W,计算字符编码测算距离移动到制定地点
+          move = (item.charCodeAt() - charCodeC) * distance
+        } else {
+          // 当点击X、Y、Z时直接移动最大距离
+          move = MAX_LEFT_MOVE
+        }
+        this._wrapperMove(item, index, move)
+      },
+      // endregion
+
+      // region 快速入口模块
+      open() {
+        this.showEntry = !this.showEntry
+      },
+      close() {
+        this.showEntry = false
+      },
+      quickSelect(item, index) {
+        let move
+        if (item === HOT) {
+          move = 0
+        } else {
+          move = Math.min(0, Math.max(MAX_LEFT_MOVE, (item.charCodeAt() - charCodeC) * distance))
+        }
+        this._wrapperMove(item, index, move)
+      },
+      // endregion
+
+      // region 抽象函数模块
+      _wrapperMove(item, index, move) {
+        this.$refs.tabWrapper.style[transform] = `translate3d(${move}px,0,0)`
+        this.$refs.tabWrapper.style[transitionDuration] = `${TIME}ms`
+        this.scroll.x = move
+        this.currentIndex = index
+        this._getSingerList(item)
+      },
+      // endregion
+
+      // region 跳转详情页
       selectSinger(item, index) {
         this.$router.push({
           path: `/singer/${item.id}`
         })
         this.setSinger(item)
       },
+      // endregion
       /**
        * 原生JS滑动实现版
        * @param e

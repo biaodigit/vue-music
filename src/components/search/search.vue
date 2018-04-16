@@ -25,7 +25,8 @@
     <div class="search-result-wrapper" v-show="query" ref="searchResult">
       <search-result @select="saveSearch" @listScroll="blurInput" :query="query" ref="result"></search-result>
     </div>
-    <confirm v-model="showConfirm" @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirm-text="清空" ref="confirm"></confirm>
+    <confirm v-model="showConfirm" @confirm="clearSearchHistory" text="是否清空所有搜索历史" confirm-text="清空"
+             ref="confirm"></confirm>
     <router-view></router-view>
   </div>
 </template>

@@ -119,7 +119,7 @@
 
   const transform = prefixStyle('transform')
   const transitionDuration = prefixStyle('transitionDuration')
-  const timeExp = /\[(\d{2}):(\d{2}):(\d{2})]/g
+  const timeExp = /\[(\d{2}):(\d{2}):(\d{2})\]/g
 
   export default {
     mixins: [playerMixin],
@@ -140,12 +140,39 @@
       this.touch = {}
     },
     methods: {
+      // region 数据化初始化模块
+      format(time) {
+        time = time | 0
+        let minute = time / 60 | 0
+        let second = this.$_formatTime(time % 60)
+        return `${minute}:${second}`
+      },
+      $_formatTime(time) {
+        let len = time.toString().length
+        while (len < 2) {
+          time = `0${time}`
+          len++
+        }
+        return time
+      },
+      updateTime(e) {
+        this.currentTime = e.target.currentTime
+      },
+      // endregion
+
+      // region 播放器其他功能
       back() {
         this.setFullScreen(false)
       },
       open() {
         this.setFullScreen(true)
       },
+      showPlaylist() {
+        this.$refs.playList.show()
+      },
+      // endregion
+
+      // region 播放器底部功能栏模块
       togglePlaying() {
         if (!this.songReady) {
           return
@@ -224,23 +251,9 @@
           this.currentLyric.seek(0)
         }
       },
-      updateTime(e) {
-        this.currentTime = e.target.currentTime
-      },
-      format(time) {
-        time = time | 0
-        let minute = time / 60 | 0
-        let second = this.$_formatTime(time % 60)
-        return `${minute}:${second}`
-      },
-      $_formatTime(time) {
-        let len = time.toString().length
-        while (len < 2) {
-          time = `0${time}`
-          len++
-        }
-        return time
-      },
+      // endregion
+
+      // region 滑动条向上触发函数
       changingPercent(percent) {
         this.currentTime = this.currentSong.duration * percent
         if (this.currentLyric) {
@@ -257,6 +270,9 @@
           this.currentLyric.seek(this.currentTime * 1000)
         }
       },
+      // endregion
+
+      // region 初始化歌词模块
       getLyric() {
         this.currentSong.getLyric().then((lyric) => {
           if (this.currentSong.lyric !== lyric) {
@@ -264,7 +280,6 @@
           }
           this.currentLyric = new Lyric(lyric, this.handleLyric)
           this.hasLyric = this.currentLyric.lines.length
-          console.log(this.currentLyric)
           if (!this.hasLyric) {
             this.noLyric = this.playingLyric = this.currentLyric.lrc.replace(timeExp, '').trim()
           } else {
@@ -288,6 +303,9 @@
         }
         this.playingLyric = txt
       },
+      // endregion
+
+      // region 中部CD/歌词手势滑动模块
       middleTouchStart(e) {
         this.touch.moved = false
         let touch = e.touches[0]
@@ -334,10 +352,9 @@
         this.$refs.middle.style[transform] = `translate3d(${offsetWidth}px,0,0)`
         this.$refs.middle.style[transitionDuration] = `${time}ms`
       },
-      showPlaylist() {
-        this.$refs.playList.show()
-      },
-      // 兼容微信浏览器暂停播放CD继续转动问题
+      // endregion
+
+      // region 兼容微信浏览器暂停播放CD继续转动问题
       syncWrapperTransform(wrapper, inner) {
         if (!this.$refs[wrapper]) {
           return
@@ -350,6 +367,7 @@
         imageWrapper.style[transform] = wTransform === 'none' ? iTransform : iTransform.concat(' ', wTransform)
         console.log(imageWrapper.style[transform])
       },
+      // endregion
       ...mapMutations({
         setFullScreen: 'SET_FULL_SCREEN',
         setPlayingState: 'SET_PLAYING_STATE'
