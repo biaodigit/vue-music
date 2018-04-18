@@ -20,7 +20,7 @@
           <div class="quick-entry-wrapper" @click="close" v-show="showEntry">
             <div class="quick-entry">
               <ul class="item-list">
-                <li @click.stop="quickSelect(item,index)" class="item" v-for="(item,index) in data">
+                <li @click.stop="selectItem(item,index)" class="item" v-for="(item,index) in data">
                   <span class="text" :class="{'active': currentIndex === index}">{{item}}</span>
                 </li>
               </ul>
@@ -29,7 +29,7 @@
         </transition>
       </div>
     </div>
-    <singer-list @select="selectSinger" :singers="singers"></singer-list>
+    <singer-list @select="selectSinger" :type="type" :singers="singers"></singer-list>
     <router-view></router-view>
   </div>
 </template>
@@ -48,11 +48,11 @@
   const transitionDuration = prefixStyle('transitionDuration')
 
   const MAX_LEFT_MOVE = -1050
-  const DEFAULT_TYPE = 'all'
+  const DEFAULT_TYPE = '热门'
   const TIME = 300
   const charCodeC = 67
-  const indexOfC = 3
-  const indexOfW = 24
+  // const indexOfC = 3
+  // const indexOfW = 24
   const distance = -50
   const HOT = '热门'
 
@@ -63,7 +63,8 @@
         currentIndex: 0,
         scrollX: 0,
         singers: [],
-        showEntry: false
+        showEntry: false,
+        type: true
       }
     },
     created() {
@@ -96,6 +97,9 @@
       _getSingerList(type) {
         if (type === HOT) {
           type = 'all'
+          this.type = true
+        } else {
+          this.type = false
         }
         getSingerList(type).then((res) => {
           if (res.code === ERR_OK) {
@@ -117,19 +121,11 @@
 
       // region 横向滚动导航入口
       selectItem(item, index) {
-        this.touch.initiated = true
-        this.prevIndex = this.currentIndex
-        this.currentIndex = index
         let move
-        // 当导航条左侧移动距离小于等于44时点击前3个选项后导航条复位
-        if (this.currentIndex <= indexOfC) {
+        if (item === HOT) {
           move = 0
-        } else if (this.currentIndex > indexOfC && this.currentIndex <= indexOfW) {
-          // 当点击的位置索引是D - W,计算字符编码测算距离移动到制定地点
-          move = (item.charCodeAt() - charCodeC) * distance
         } else {
-          // 当点击X、Y、Z时直接移动最大距离
-          move = MAX_LEFT_MOVE
+          move = Math.min(0, Math.max(MAX_LEFT_MOVE, (item.charCodeAt() - charCodeC) * distance))
         }
         this._wrapperMove(item, index, move)
       },
@@ -141,15 +137,6 @@
       },
       close() {
         this.showEntry = false
-      },
-      quickSelect(item, index) {
-        let move
-        if (item === HOT) {
-          move = 0
-        } else {
-          move = Math.min(0, Math.max(MAX_LEFT_MOVE, (item.charCodeAt() - charCodeC) * distance))
-        }
-        this._wrapperMove(item, index, move)
       },
       // endregion
 
