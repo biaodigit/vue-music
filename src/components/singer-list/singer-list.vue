@@ -2,8 +2,8 @@
   <scroll :data="singers" class="singer-type" ref="scroll">
     <ul class="list">
       <li @click="selectItem(item,index)" class="item" v-for="(item,index) in singers">
-        <img class="avatar" v-lazy="item.avatar">
-        <span class="name">{{item.name}}</span>
+        <img class="avatar" v-show="type || index < 8" v-lazy="item.avatar">
+        <span class="name" :class="noImage(index)">{{item.name}}</span>
       </li>
     </ul>
   </scroll>
@@ -19,6 +19,10 @@
       singers: {
         type: Array,
         default: []
+      },
+      type: {
+        type: Boolean,
+        default: true
       }
     },
     mounted() {
@@ -33,6 +37,12 @@
       },
       selectItem(item, index) {
         this.$emit('select', item, index)
+      },
+      noImage(index) {
+        if (this.type || index < 8) {
+          return
+        }
+        return 'no-Image'
       }
     },
     components: {
