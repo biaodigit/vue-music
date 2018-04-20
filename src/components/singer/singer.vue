@@ -51,8 +51,6 @@
   const DEFAULT_TYPE = '热门'
   const TIME = 300
   const charCodeC = 67
-  // const indexOfC = 3
-  // const indexOfW = 24
   const distance = -50
   const HOT = '热门'
 
