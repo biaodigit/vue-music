@@ -38,7 +38,6 @@
       },
       _formatSongList(list) {
         let ret = []
-        console.log(list)
         list.forEach((song) => {
           let {musicData} = song
           if (isValidMusic(musicData)) {

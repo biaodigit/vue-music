@@ -41,8 +41,6 @@
     watch: {
       showFlag(val) {
         if (val) {
-          this.$emit('input', true)
-
           clearTimeout(this.timer)
           this.timer = setTimeout(() => {
             this.$emit('input', false)
